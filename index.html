@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Matematik &amp; glass!</title>
+    <link href="https://fonts.googleapis.com/css?family=Muli:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Herr+Von+Muellerhoff" rel="stylesheet">
+    <link rel="stylesheet" media="all and (max-device-width: 480px)" href="iphone.css">
+    <style type="text/css">@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+    html, head, body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .top {
+      font-family: 'Muli', sans-serif;
+    }
+
+    h1 {
+      font-size: 60px;
+    }
+
+    .buttons {
+      text-align: right;
+    }
+
+    button {
+      cursor: pointer;
+      font-size: 20px;
+      border: 0 solid #ddd;
+      border-radius: 4px;
+      background: white;
+      color: #ccc;
+    }
+
+    .problem {
+        display: inline-block;
+        padding: 2rem;
+        text-align: right;
+    }
+
+    .a {
+        width: 100%;
+    }
+
+    .b {
+        width: 100%;
+        border-bottom: 1px solid black;
+    }
+
+    @media print {
+        .no-print {
+            display: none;
+        }
+    }
+
+    </style>
+  </head>
+  <body>
+    <div id="main">
+    </div>
+  </body>
+
+  <script src="matematik.js" charset="utf-8"></script>
+  <noscript>
+  </noscript>
+
+  <script>
+    var app = Elm.Matematik.init({node: document.getElementById('main')});
+  </script>
+
+</html>
