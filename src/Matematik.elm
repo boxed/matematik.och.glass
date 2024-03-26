@@ -68,8 +68,11 @@ viewProblem model i =
         g = Random.initialSeed (model.seed + i)
         (a, g2)  = (Random.step high g)
         (b, _)  = (Random.step low g2)
+        a_s = (String.fromInt a)
+        b_s = (String.fromInt b)
+        padLen = max (String.length a_s) (String.length b_s) + 1
     in
         div [ class "problem" ]
-            [ div [class "a"] [text (String.fromInt a)]
-            , div [class "b"] [text (String.padRight 4 '\u{00A0}' "+" ), text (String.fromInt b)]
+            [ div [class "a"] [text a_s]
+            , div [class "b"] [text (String.padRight padLen '\u{00A0}' "+" ), text b_s]
             ]
