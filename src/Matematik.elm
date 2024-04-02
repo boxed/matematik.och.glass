@@ -1,7 +1,7 @@
 module Matematik exposing (..)
 
 import Browser
-import Html exposing (Attribute, Html, div, h1, input, label, text)
+import Html exposing (Attribute, Html, div, h1, input, label, span, text)
 import Html.Attributes exposing (checked, class, name, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Random
@@ -51,6 +51,33 @@ type Mode
     = Addition
     | Subtraction
     | Multiplication
+    | Division
+    | LongDivision
+
+
+type alias ModeInfo =
+    { name : String
+    , value : Mode
+    }
+
+
+modes =
+    [ { name = "Addition"
+      , value = Addition
+      }
+    , { name = "Subtraktion"
+      , value = Subtraction
+      }
+    , { name = "Multiplikation"
+      , value = Multiplication
+      }
+    , { name = "Division"
+      , value = Division
+      }
+    , { name = "Division, liggande stolen"
+      , value = LongDivision
+      }
+    ]
 
 
 
@@ -119,27 +146,9 @@ view model =
 
         -- mode
         , div [ class "no-print" ]
-            [ div [ class "mode" ]
-                [ label []
-                    [ text "Addition"
-                    , input [ type_ "radio", name "mode", checked (model.mode == Addition), onClick (SetMode Addition) ] []
-                    ]
-                ]
-            , div [ class "mode" ]
-                [ label []
-                    [ text "Subtraktion"
-                    , input [ type_ "radio", name "mode", checked (model.mode == Subtraction), onClick (SetMode Subtraction) ] []
-                    ]
-                ]
-            , div [ class "mode" ]
-                [ label []
-                    [ text "Multiplikation"
-                    , input [ type_ "radio", name "mode", checked (model.mode == Multiplication), onClick (SetMode Multiplication) ] []
-                    ]
-                ]
-            ]
+            (List.map (viewModeSwitcher model.mode) modes)
 
-        -- difficulty setting
+        -- difficulty settings
         , div [ class "no-print" ]
             [ div [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_from), onInput (\x -> SetAFrom (String.toInt x)), class "slider" ] [], text (String.fromInt model.a_range_from) ]
             , div [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_to), onInput (\x -> SetATo (String.toInt x)), class "slider" ] [], text (String.fromInt model.a_range_to) ]
@@ -147,6 +156,16 @@ view model =
             , div [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_to), onInput (\x -> SetBTo (String.toInt x)), class "slider" ] [], text (String.fromInt model.b_range_to) ]
             ]
         , div [] (List.map (viewProblem model) (List.range 0 188))
+        ]
+
+
+viewModeSwitcher : Mode -> ModeInfo -> Html Msg
+viewModeSwitcher mode modeInfo =
+    div [ class "mode" ]
+        [ label []
+            [ text modeInfo.name
+            , input [ type_ "radio", name "mode", checked (mode == modeInfo.value), onClick (SetMode modeInfo.value) ] []
+            ]
         ]
 
 
@@ -181,20 +200,30 @@ viewProblem model i =
     in
     case model.mode of
         Addition ->
-            div [ class "problem" ]
+            div [ class "problem addition" ]
                 [ div [ class "a" ] [ text a_s ]
                 , div [ class "b" ] [ text (String.padRight padLen '\u{00A0}' "+"), text b_s ]
                 ]
 
         Subtraction ->
-            div [ class "problem" ]
+            div [ class "problem subtraction" ]
                 [ div [ class "a" ] [ text a_s ]
                 , div [ class "b" ] [ text (String.padRight padLen '\u{00A0}' "-"), text b_s ]
                 ]
 
         Multiplication ->
-            div [ class "problem" ]
+            div [ class "problem multiplication" ]
                 [ div [ class "a" ] [ text a_s, text " · ", text b_s, text " =" ]
+                ]
+
+        Division ->
+            div [ class "problem division" ]
+                [ div [ class "a" ] [ text a_s, text " / ", text b_s, text " =" ]
+                ]
+
+        LongDivision ->
+            div [ class "problem long-division" ]
+                [ div [ class "both" ] [ span [ class "a" ] [ text a_s ], span [ class "b" ] [ text b_s ] ]
                 ]
 
 

@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.O.E === region.T.E)
+	if (region.P.E === region.U.E)
 	{
-		return 'on line ' + region.O.E;
+		return 'on line ' + region.P.E;
 	}
-	return 'on lines ' + region.O.E + ' through ' + region.T.E;
+	return 'on lines ' + region.P.E + ' through ' + region.U.E;
 }
 
 
@@ -1857,7 +1857,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.az,
+		impl.aA,
 		impl.aH,
 		impl.aF,
 		function() { return function() {} }
@@ -2719,9 +2719,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		o: func(record.o),
-		P: record.P,
-		M: record.M
+		n: func(record.n),
+		Q: record.Q,
+		N: record.N
 	}
 });
 
@@ -2989,11 +2989,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.o;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.P;
+		var message = !tag ? value : tag < 3 ? value.a : value.n;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Q;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.M) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.N) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,7 +3943,7 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.az,
+		impl.aA,
 		impl.aH,
 		impl.aF,
 		function(sendToApp, initialModel) {
@@ -3979,11 +3979,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.az,
+		impl.aA,
 		impl.aH,
 		impl.aF,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.N && impl.N(sendToApp)
+			var divertHrefToApp = impl.O && impl.O(sendToApp)
 			var view = impl.aI;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -3992,7 +3992,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.as);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.at);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
@@ -4058,7 +4058,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		N: function(sendToApp)
+		O: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.af === next.af
-							&& curr.X === next.X
-							&& curr.ac.a === next.ac.a
+							&& curr.ag === next.ag
+							&& curr.Y === next.Y
+							&& curr.ad.a === next.ad.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,9 +4084,9 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		az: function(flags)
+		aA: function(flags)
 		{
-			return A3(impl.az, flags, _Browser_getUrl(), key);
+			return A3(impl.aA, flags, _Browser_getUrl(), key);
 		},
 		aI: impl.aI,
 		aH: impl.aH,
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { ax: 'hidden', at: 'visibilitychange' }
+		? { ay: 'hidden', au: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { ax: 'mozHidden', at: 'mozvisibilitychange' }
+		? { ay: 'mozHidden', au: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { ax: 'msHidden', at: 'msvisibilitychange' }
+		? { ay: 'msHidden', au: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { ax: 'webkitHidden', at: 'webkitvisibilitychange' }
-		: { ax: 'hidden', at: 'visibilitychange' };
+		? { ay: 'webkitHidden', au: 'webkitvisibilitychange' }
+		: { ay: 'hidden', au: 'visibilitychange' };
 }
 
 
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aj: _Browser_getScene(),
-		am: {
-			ao: _Browser_window.pageXOffset,
-			ap: _Browser_window.pageYOffset,
-			an: _Browser_doc.documentElement.clientWidth,
-			W: _Browser_doc.documentElement.clientHeight
+		ak: _Browser_getScene(),
+		an: {
+			ap: _Browser_window.pageXOffset,
+			aq: _Browser_window.pageYOffset,
+			ao: _Browser_doc.documentElement.clientWidth,
+			X: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4262,8 +4262,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		an: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		W: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		ao: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		X: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aj: {
-				an: node.scrollWidth,
-				W: node.scrollHeight
+			ak: {
+				ao: node.scrollWidth,
+				X: node.scrollHeight
 			},
-			am: {
-				ao: node.scrollLeft,
-				ap: node.scrollTop,
-				an: node.clientWidth,
-				W: node.clientHeight
+			an: {
+				ap: node.scrollLeft,
+				aq: node.scrollTop,
+				ao: node.clientWidth,
+				X: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aj: _Browser_getScene(),
-			am: {
-				ao: x,
-				ap: y,
-				an: _Browser_doc.documentElement.clientWidth,
-				W: _Browser_doc.documentElement.clientHeight
+			ak: _Browser_getScene(),
+			an: {
+				ap: x,
+				aq: y,
+				ao: _Browser_doc.documentElement.clientWidth,
+				X: _Browser_doc.documentElement.clientHeight
 			},
-			av: {
-				ao: x + rect.left,
-				ap: y + rect.top,
-				an: rect.width,
-				W: rect.height
+			aw: {
+				ap: x + rect.left,
+				aq: y + rect.top,
+				ao: rect.width,
+				X: rect.height
 			}
 		};
 	});
@@ -4957,7 +4957,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {V: fragment, X: host, aa: path, ac: port_, af: protocol, ag: query};
+		return {W: fragment, Y: host, ab: path, ad: port_, ag: protocol, ah: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5381,7 +5381,7 @@ var $elm$random$Random$int = F2(
 	});
 var $author$project$Matematik$init = function (_v0) {
 	return _Utils_Tuple2(
-		{w: 12, x: 120, y: 5, z: 40, s: 0, J: 0},
+		{w: 12, x: 120, y: 5, z: 40, F: 0, K: 0},
 		A2(
 			$elm$random$Random$generate,
 			$author$project$Matematik$GotRandomNumber,
@@ -5399,14 +5399,14 @@ var $author$project$Matematik$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{J: x}),
+						{K: x}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
 				var mode = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{s: mode}),
+						{F: mode}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
 				var _int = msg.a;
@@ -5458,7 +5458,6 @@ var $author$project$Matematik$update = F2(
 				}
 		}
 	});
-var $author$project$Matematik$Multiplication = 2;
 var $author$project$Matematik$SetAFrom = function (a) {
 	return {$: 2, a: a};
 };
@@ -5471,19 +5470,6 @@ var $author$project$Matematik$SetBFrom = function (a) {
 var $author$project$Matematik$SetBTo = function (a) {
 	return {$: 5, a: a};
 };
-var $author$project$Matematik$SetMode = function (a) {
-	return {$: 1, a: a};
-};
-var $author$project$Matematik$Subtraction = 1;
-var $elm$json$Json$Encode$bool = _Json_wrap;
-var $elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$bool(bool));
-	});
-var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5496,35 +5482,29 @@ var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$input = _VirtualDom_node('input');
-var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
 var $author$project$Matematik$max_ = $elm$html$Html$Attributes$max;
 var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
 var $author$project$Matematik$min_ = $elm$html$Html$Attributes$min;
-var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 0, a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
+var $author$project$Matematik$Division = 3;
+var $author$project$Matematik$LongDivision = 4;
+var $author$project$Matematik$Multiplication = 2;
+var $author$project$Matematik$Subtraction = 1;
+var $author$project$Matematik$modes = _List_fromArray(
+	[
+		{s: 'Addition', q: 0},
+		{s: 'Subtraktion', q: 1},
+		{s: 'Multiplikation', q: 2},
+		{s: 'Division', q: 3},
+		{s: 'Division, liggande stolen', q: 4}
+	]);
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
 var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
 	return {$: 1, a: a};
 };
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
 		return A2(
@@ -5558,6 +5538,67 @@ var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Matematik$SetMode = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$Matematik$viewModeSwitcher = F2(
+	function (mode, modeInfo) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('mode')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$label,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text(modeInfo.s),
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$type_('radio'),
+									$elm$html$Html$Attributes$name('mode'),
+									$elm$html$Html$Attributes$checked(
+									_Utils_eq(mode, modeInfo.q)),
+									$elm$html$Html$Events$onClick(
+									$author$project$Matematik$SetMode(modeInfo.q))
+								]),
+							_List_Nil)
+						]))
+				]));
+	});
 var $elm$core$String$cons = _String_cons;
 var $elm$core$String$fromChar = function (_char) {
 	return A2($elm$core$String$cons, _char, '');
@@ -5584,11 +5625,12 @@ var $elm$core$String$padRight = F3(
 				n - $elm$core$String$length(string),
 				$elm$core$String$fromChar(_char)));
 	});
+var $elm$html$Html$span = _VirtualDom_node('span');
 var $author$project$Matematik$viewProblem = F2(
 	function (model, i) {
 		var low = A2($elm$random$Random$int, model.y, model.z);
 		var high = A2($elm$random$Random$int, model.w, model.x);
-		var g = $elm$random$Random$initialSeed(model.J + i);
+		var g = $elm$random$Random$initialSeed(model.K + i);
 		var _v0 = A2($elm$random$Random$step, high, g);
 		var a = _v0.a;
 		var g2 = _v0.b;
@@ -5600,14 +5642,14 @@ var $author$project$Matematik$viewProblem = F2(
 			$elm$core$Basics$max,
 			$elm$core$String$length(a_s),
 			$elm$core$String$length(b_s)) + 1;
-		var _v2 = model.s;
+		var _v2 = model.F;
 		switch (_v2) {
 			case 0:
 				return A2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('problem')
+							$elm$html$Html$Attributes$class('problem addition')
 						]),
 					_List_fromArray(
 						[
@@ -5639,7 +5681,7 @@ var $author$project$Matematik$viewProblem = F2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('problem')
+							$elm$html$Html$Attributes$class('problem subtraction')
 						]),
 					_List_fromArray(
 						[
@@ -5666,12 +5708,12 @@ var $author$project$Matematik$viewProblem = F2(
 									$elm$html$Html$text(b_s)
 								]))
 						]));
-			default:
+			case 2:
 				return A2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('problem')
+							$elm$html$Html$Attributes$class('problem multiplication')
 						]),
 					_List_fromArray(
 						[
@@ -5687,6 +5729,68 @@ var $author$project$Matematik$viewProblem = F2(
 									$elm$html$Html$text(' · '),
 									$elm$html$Html$text(b_s),
 									$elm$html$Html$text(' =')
+								]))
+						]));
+			case 3:
+				return A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('problem division')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('a')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(a_s),
+									$elm$html$Html$text(' / '),
+									$elm$html$Html$text(b_s),
+									$elm$html$Html$text(' =')
+								]))
+						]));
+			default:
+				return A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('problem long-division')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('both')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$span,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('a')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(a_s)
+										])),
+									A2(
+									$elm$html$Html$span,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('b')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(b_s)
+										]))
 								]))
 						]));
 		}
@@ -5716,90 +5820,10 @@ var $author$project$Matematik$view = function (model) {
 					[
 						$elm$html$Html$Attributes$class('no-print')
 					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('mode')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$label,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Addition'),
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$type_('radio'),
-												$elm$html$Html$Attributes$name('mode'),
-												$elm$html$Html$Attributes$checked(!model.s),
-												$elm$html$Html$Events$onClick(
-												$author$project$Matematik$SetMode(0))
-											]),
-										_List_Nil)
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('mode')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$label,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Subtraktion'),
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$type_('radio'),
-												$elm$html$Html$Attributes$name('mode'),
-												$elm$html$Html$Attributes$checked(model.s === 1),
-												$elm$html$Html$Events$onClick(
-												$author$project$Matematik$SetMode(1))
-											]),
-										_List_Nil)
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('mode')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$label,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Multiplikation'),
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$type_('radio'),
-												$elm$html$Html$Attributes$name('mode'),
-												$elm$html$Html$Attributes$checked(model.s === 2),
-												$elm$html$Html$Events$onClick(
-												$author$project$Matematik$SetMode(2))
-											]),
-										_List_Nil)
-									]))
-							]))
-					])),
+				A2(
+					$elm$core$List$map,
+					$author$project$Matematik$viewModeSwitcher(model.F),
+					$author$project$Matematik$modes)),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
@@ -5924,7 +5948,7 @@ var $author$project$Matematik$view = function (model) {
 };
 var $author$project$Matematik$main = $elm$browser$Browser$element(
 	{
-		az: $author$project$Matematik$init,
+		aA: $author$project$Matematik$init,
 		aF: function (_v0) {
 			return $elm$core$Platform$Sub$none;
 		},
