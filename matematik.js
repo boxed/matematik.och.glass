@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.J.z === region.O.z)
+	if (region.O.E === region.T.E)
 	{
-		return 'on line ' + region.J.z;
+		return 'on line ' + region.O.E;
 	}
-	return 'on lines ' + region.J.z + ' through ' + region.O.z;
+	return 'on lines ' + region.O.E + ' through ' + region.T.E;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.au,
-		impl.aC,
-		impl.aA,
+		impl.az,
+		impl.aH,
+		impl.aF,
 		function() { return function() {} }
 	);
 });
@@ -2720,8 +2720,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		o: func(record.o),
-		K: record.K,
-		G: record.G
+		P: record.P,
+		M: record.M
 	}
 });
 
@@ -2990,10 +2990,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.o;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.K;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.P;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.G) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.M) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,11 +3943,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.au,
-		impl.aC,
-		impl.aA,
+		impl.az,
+		impl.aH,
+		impl.aF,
 		function(sendToApp, initialModel) {
-			var view = impl.aD;
+			var view = impl.aI;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.au,
-		impl.aC,
-		impl.aA,
+		impl.az,
+		impl.aH,
+		impl.aF,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.I && impl.I(sendToApp)
-			var view = impl.aD;
+			var divertHrefToApp = impl.N && impl.N(sendToApp)
+			var view = impl.aI;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,12 +3992,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.an);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.as);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aB) && (_VirtualDom_doc.title = title = doc.aB);
+				(title !== doc.aG) && (_VirtualDom_doc.title = title = doc.aG);
 			});
 		}
 	);
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aw;
-	var onUrlRequest = impl.ax;
+	var onUrlChange = impl.aB;
+	var onUrlRequest = impl.aC;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		I: function(sendToApp)
+		N: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aa === next.aa
-							&& curr.S === next.S
-							&& curr.Y.a === next.Y.a
+							&& curr.af === next.af
+							&& curr.X === next.X
+							&& curr.ac.a === next.ac.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		au: function(flags)
+		az: function(flags)
 		{
-			return A3(impl.au, flags, _Browser_getUrl(), key);
+			return A3(impl.az, flags, _Browser_getUrl(), key);
 		},
-		aD: impl.aD,
-		aC: impl.aC,
-		aA: impl.aA
+		aI: impl.aI,
+		aH: impl.aH,
+		aF: impl.aF
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { as: 'hidden', ao: 'visibilitychange' }
+		? { ax: 'hidden', at: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { as: 'mozHidden', ao: 'mozvisibilitychange' }
+		? { ax: 'mozHidden', at: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { as: 'msHidden', ao: 'msvisibilitychange' }
+		? { ax: 'msHidden', at: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { as: 'webkitHidden', ao: 'webkitvisibilitychange' }
-		: { as: 'hidden', ao: 'visibilitychange' };
+		? { ax: 'webkitHidden', at: 'webkitvisibilitychange' }
+		: { ax: 'hidden', at: 'visibilitychange' };
 }
 
 
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		ae: _Browser_getScene(),
-		ah: {
-			aj: _Browser_window.pageXOffset,
-			ak: _Browser_window.pageYOffset,
-			ai: _Browser_doc.documentElement.clientWidth,
-			R: _Browser_doc.documentElement.clientHeight
+		aj: _Browser_getScene(),
+		am: {
+			ao: _Browser_window.pageXOffset,
+			ap: _Browser_window.pageYOffset,
+			an: _Browser_doc.documentElement.clientWidth,
+			W: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4262,8 +4262,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		ai: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		R: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		an: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		W: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			ae: {
-				ai: node.scrollWidth,
-				R: node.scrollHeight
+			aj: {
+				an: node.scrollWidth,
+				W: node.scrollHeight
 			},
-			ah: {
-				aj: node.scrollLeft,
-				ak: node.scrollTop,
-				ai: node.clientWidth,
-				R: node.clientHeight
+			am: {
+				ao: node.scrollLeft,
+				ap: node.scrollTop,
+				an: node.clientWidth,
+				W: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			ae: _Browser_getScene(),
-			ah: {
-				aj: x,
-				ak: y,
-				ai: _Browser_doc.documentElement.clientWidth,
-				R: _Browser_doc.documentElement.clientHeight
+			aj: _Browser_getScene(),
+			am: {
+				ao: x,
+				ap: y,
+				an: _Browser_doc.documentElement.clientWidth,
+				W: _Browser_doc.documentElement.clientHeight
 			},
-			aq: {
-				aj: x + rect.left,
-				ak: y + rect.top,
-				ai: rect.width,
-				R: rect.height
+			av: {
+				ao: x + rect.left,
+				ap: y + rect.top,
+				an: rect.width,
+				W: rect.height
 			}
 		};
 	});
@@ -4957,7 +4957,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {Q: fragment, S: host, W: path, Y: port_, aa: protocol, ab: query};
+		return {V: fragment, X: host, aa: path, ac: port_, af: protocol, ag: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5236,9 +5236,9 @@ var $elm$core$Task$perform = F2(
 			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Matematik$GotRandomNumber = $elm$core$Basics$identity;
-var $author$project$Matematik$Model = function (seed) {
-	return {H: seed};
+var $author$project$Matematik$Addition = 0;
+var $author$project$Matematik$GotRandomNumber = function (a) {
+	return {$: 0, a: a};
 };
 var $elm$random$Random$Generate = $elm$core$Basics$identity;
 var $elm$random$Random$Seed = F2(
@@ -5381,10 +5381,10 @@ var $elm$random$Random$int = F2(
 	});
 var $author$project$Matematik$init = function (_v0) {
 	return _Utils_Tuple2(
-		$author$project$Matematik$Model(0),
+		{w: 12, x: 120, y: 5, z: 40, s: 0, J: 0},
 		A2(
 			$elm$random$Random$generate,
-			$elm$core$Basics$identity,
+			$author$project$Matematik$GotRandomNumber,
 			A2($elm$random$Random$int, 0, 100000)));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -5393,13 +5393,97 @@ var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Matematik$update = F2(
 	function (msg, model) {
-		var x = msg;
-		return _Utils_Tuple2(
-			_Utils_update(
-				model,
-				{H: x}),
-			$elm$core$Platform$Cmd$none);
+		switch (msg.$) {
+			case 0:
+				var x = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{J: x}),
+					$elm$core$Platform$Cmd$none);
+			case 1:
+				var mode = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{s: mode}),
+					$elm$core$Platform$Cmd$none);
+			case 2:
+				var _int = msg.a;
+				if (!_int.$) {
+					var x = _int.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{w: x}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 3:
+				var _int = msg.a;
+				if (!_int.$) {
+					var x = _int.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{x: x}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 4:
+				var _int = msg.a;
+				if (!_int.$) {
+					var x = _int.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{y: x}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			default:
+				var _int = msg.a;
+				if (!_int.$) {
+					var x = _int.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{z: x}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+		}
 	});
+var $author$project$Matematik$Multiplication = 2;
+var $author$project$Matematik$SetAFrom = function (a) {
+	return {$: 2, a: a};
+};
+var $author$project$Matematik$SetATo = function (a) {
+	return {$: 3, a: a};
+};
+var $author$project$Matematik$SetBFrom = function (a) {
+	return {$: 4, a: a};
+};
+var $author$project$Matematik$SetBTo = function (a) {
+	return {$: 5, a: a};
+};
+var $author$project$Matematik$SetMode = function (a) {
+	return {$: 1, a: a};
+};
+var $author$project$Matematik$Subtraction = 1;
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5411,10 +5495,69 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
+var $author$project$Matematik$max_ = $elm$html$Html$Attributes$max;
+var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
+var $author$project$Matematik$min_ = $elm$html$Html$Attributes$min;
+var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Matematik$high = A2($elm$random$Random$int, 12, 120);
-var $author$project$Matematik$low = A2($elm$random$Random$int, 5, 40);
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $elm$core$String$cons = _String_cons;
 var $elm$core$String$fromChar = function (_char) {
 	return A2($elm$core$String$cons, _char, '');
@@ -5443,45 +5586,110 @@ var $elm$core$String$padRight = F3(
 	});
 var $author$project$Matematik$viewProblem = F2(
 	function (model, i) {
-		var g = $elm$random$Random$initialSeed(model.H + i);
-		var _v0 = A2($elm$random$Random$step, $author$project$Matematik$high, g);
+		var low = A2($elm$random$Random$int, model.y, model.z);
+		var high = A2($elm$random$Random$int, model.w, model.x);
+		var g = $elm$random$Random$initialSeed(model.J + i);
+		var _v0 = A2($elm$random$Random$step, high, g);
 		var a = _v0.a;
 		var g2 = _v0.b;
-		var _v1 = A2($elm$random$Random$step, $author$project$Matematik$low, g2);
+		var a_s = $elm$core$String$fromInt(a);
+		var _v1 = A2($elm$random$Random$step, low, g2);
 		var b = _v1.a;
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('problem')
-				]),
-			_List_fromArray(
-				[
-					A2(
+		var b_s = $elm$core$String$fromInt(b);
+		var padLen = A2(
+			$elm$core$Basics$max,
+			$elm$core$String$length(a_s),
+			$elm$core$String$length(b_s)) + 1;
+		var _v2 = model.s;
+		switch (_v2) {
+			case 0:
+				return A2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('a')
+							$elm$html$Html$Attributes$class('problem')
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(
-							$elm$core$String$fromInt(a))
-						])),
-					A2(
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('a')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(a_s)
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('b')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									A3($elm$core$String$padRight, padLen, '\u00A0', '+')),
+									$elm$html$Html$text(b_s)
+								]))
+						]));
+			case 1:
+				return A2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('b')
+							$elm$html$Html$Attributes$class('problem')
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(
-							A3($elm$core$String$padRight, 4, '\u00A0', '+')),
-							$elm$html$Html$text(
-							$elm$core$String$fromInt(b))
-						]))
-				]));
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('a')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(a_s)
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('b')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									A3($elm$core$String$padRight, padLen, '\u00A0', '-')),
+									$elm$html$Html$text(b_s)
+								]))
+						]));
+			default:
+				return A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('problem')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('a')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(a_s),
+									$elm$html$Html$text(' · '),
+									$elm$html$Html$text(b_s),
+									$elm$html$Html$text(' =')
+								]))
+						]));
+		}
 	});
 var $author$project$Matematik$view = function (model) {
 	return A2(
@@ -5504,6 +5712,209 @@ var $author$project$Matematik$view = function (model) {
 					])),
 				A2(
 				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('no-print')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('mode')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$label,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Addition'),
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$type_('radio'),
+												$elm$html$Html$Attributes$name('mode'),
+												$elm$html$Html$Attributes$checked(!model.s),
+												$elm$html$Html$Events$onClick(
+												$author$project$Matematik$SetMode(0))
+											]),
+										_List_Nil)
+									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('mode')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$label,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Subtraktion'),
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$type_('radio'),
+												$elm$html$Html$Attributes$name('mode'),
+												$elm$html$Html$Attributes$checked(model.s === 1),
+												$elm$html$Html$Events$onClick(
+												$author$project$Matematik$SetMode(1))
+											]),
+										_List_Nil)
+									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('mode')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$label,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Multiplikation'),
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$type_('radio'),
+												$elm$html$Html$Attributes$name('mode'),
+												$elm$html$Html$Attributes$checked(model.s === 2),
+												$elm$html$Html$Events$onClick(
+												$author$project$Matematik$SetMode(2))
+											]),
+										_List_Nil)
+									]))
+							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('no-print')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.w)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetAFrom(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil),
+								$elm$html$Html$text(
+								$elm$core$String$fromInt(model.w))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.x)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetATo(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil),
+								$elm$html$Html$text(
+								$elm$core$String$fromInt(model.x))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.y)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetBFrom(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil),
+								$elm$html$Html$text(
+								$elm$core$String$fromInt(model.y))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.z)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetBTo(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil),
+								$elm$html$Html$text(
+								$elm$core$String$fromInt(model.z))
+							]))
+					])),
+				A2(
+				$elm$html$Html$div,
 				_List_Nil,
 				A2(
 					$elm$core$List$map,
@@ -5513,12 +5924,12 @@ var $author$project$Matematik$view = function (model) {
 };
 var $author$project$Matematik$main = $elm$browser$Browser$element(
 	{
-		au: $author$project$Matematik$init,
-		aA: function (_v0) {
+		az: $author$project$Matematik$init,
+		aF: function (_v0) {
 			return $elm$core$Platform$Sub$none;
 		},
-		aC: $author$project$Matematik$update,
-		aD: $author$project$Matematik$view
+		aH: $author$project$Matematik$update,
+		aI: $author$project$Matematik$view
 	});
 _Platform_export({'Matematik':{'init':$author$project$Matematik$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
