@@ -5236,10 +5236,10 @@ var $elm$core$Task$perform = F2(
 			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Matematik$Addition = 0;
 var $author$project$Matematik$GotRandomNumber = function (a) {
 	return {$: 0, a: a};
 };
+var $author$project$Matematik$LongDivision = 4;
 var $elm$random$Random$Generate = $elm$core$Basics$identity;
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
@@ -5381,7 +5381,7 @@ var $elm$random$Random$int = F2(
 	});
 var $author$project$Matematik$init = function (_v0) {
 	return _Utils_Tuple2(
-		{w: 12, x: 120, y: 5, z: 40, F: 0, K: 0},
+		{w: 12, x: 120, y: 5, z: 40, F: 4, K: 0},
 		A2(
 			$elm$random$Random$generate,
 			$author$project$Matematik$GotRandomNumber,
@@ -5486,8 +5486,8 @@ var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('ma
 var $author$project$Matematik$max_ = $elm$html$Html$Attributes$max;
 var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
 var $author$project$Matematik$min_ = $elm$html$Html$Attributes$min;
+var $author$project$Matematik$Addition = 0;
 var $author$project$Matematik$Division = 3;
-var $author$project$Matematik$LongDivision = 4;
 var $author$project$Matematik$Multiplication = 2;
 var $author$project$Matematik$Subtraction = 1;
 var $author$project$Matematik$modes = _List_fromArray(
@@ -5637,6 +5637,7 @@ var $author$project$Matematik$viewProblem = F2(
 		var a_s = $elm$core$String$fromInt(a);
 		var _v1 = A2($elm$random$Random$step, low, g2);
 		var b = _v1.a;
+		var a_times_b_s = $elm$core$String$fromInt(a * b);
 		var b_s = $elm$core$String$fromInt(b);
 		var padLen = A2(
 			$elm$core$Basics$max,
@@ -5748,7 +5749,7 @@ var $author$project$Matematik$viewProblem = F2(
 								]),
 							_List_fromArray(
 								[
-									$elm$html$Html$text(a_s),
+									$elm$html$Html$text(a_times_b_s),
 									$elm$html$Html$text(' / '),
 									$elm$html$Html$text(b_s),
 									$elm$html$Html$text(' =')
@@ -5779,7 +5780,7 @@ var $author$project$Matematik$viewProblem = F2(
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(a_s)
+											$elm$html$Html$text(a_times_b_s)
 										])),
 									A2(
 									$elm$html$Html$span,

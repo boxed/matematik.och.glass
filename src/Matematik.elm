@@ -19,7 +19,7 @@ main =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { seed = 0
-      , mode = Addition
+      , mode = LongDivision
       , a_range_from = 12
       , a_range_to = 120
       , b_range_from = 5
@@ -195,6 +195,9 @@ viewProblem model i =
         b_s =
             String.fromInt b
 
+        a_times_b_s =
+            String.fromInt (a * b)
+
         padLen =
             max (String.length a_s) (String.length b_s) + 1
     in
@@ -218,12 +221,12 @@ viewProblem model i =
 
         Division ->
             div [ class "problem division" ]
-                [ div [ class "a" ] [ text a_s, text " / ", text b_s, text " =" ]
+                [ div [ class "a" ] [ text a_times_b_s, text " / ", text b_s, text " =" ]
                 ]
 
         LongDivision ->
             div [ class "problem long-division" ]
-                [ div [ class "both" ] [ span [ class "a" ] [ text a_s ], span [ class "b" ] [ text b_s ] ]
+                [ div [ class "both" ] [ span [ class "a" ] [ text a_times_b_s ], span [ class "b" ] [ text b_s ] ]
                 ]
 
 
