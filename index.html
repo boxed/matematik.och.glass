@@ -50,25 +50,42 @@
             padding-right: 2rem;
         }
 
-        .long-division {
+        .long-division-se {
             padding-bottom: 10rem;
         }
 
-        .long-division .both {
+        .long-division-se .both {
             border-top: 1px solid black;
         }
 
-        .long-division .a {
+        .long-division-se .a {
             padding-right: 0.5rem;
             padding-left: 0.2rem;
         }
 
-        .long-division .b {
+        .long-division-se .b {
             border-bottom: 0;
             border-left: 1px solid black;
             border-bottom: 1px solid black;
             padding-left: 0.2rem;
             padding-right: 0.2rem;
+        }
+
+        .long-division-en {
+            padding-bottom: 10rem;
+        }
+
+        .long-division-en .both {
+        }
+
+        .long-division-en .a {
+            border-top: 1px solid black;
+            padding-right: 0.5rem;
+            padding-left: 0.2rem;
+        }
+
+        .long-division-en .b {
+            border-bottom: 0;
         }
 
         .multiplication,
@@ -103,7 +120,7 @@
     </noscript>
 
     <script>
-        var app = Elm.Matematik.init({node: document.getElementById('main')});
+        var app = Elm.Matematik.init({node: document.getElementById('main'), flags: {language: navigator.language}});
     </script>
 
 </html>

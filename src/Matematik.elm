@@ -1,7 +1,7 @@
 module Matematik exposing (..)
 
 import Browser
-import Html exposing (Attribute, Html, div, h1, input, label, span, text)
+import Html exposing (Attribute, Html, div, h1, input, label, span, table, td, text, tr)
 import Html.Attributes exposing (checked, class, name, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Random
@@ -16,14 +16,15 @@ main =
         }
 
 
-init : () -> ( Model, Cmd Msg )
-init _ =
+init : Flags -> ( Model, Cmd Msg )
+init flags =
     ( { seed = 0
-      , mode = LongDivision
+      , mode = Addition
       , a_range_from = 12
       , a_range_to = 120
       , b_range_from = 5
       , b_range_to = 40
+      , flags = flags
       }
     , Random.generate GotRandomNumber (Random.int 0 100000)
     )
@@ -40,11 +41,12 @@ type alias Model =
     , a_range_to : Int
     , b_range_from : Int
     , b_range_to : Int
+    , flags : Flags
     }
 
 
-
--- TODO: division w/ long division (aka "liggande stolen")
+type alias Flags =
+    { language : String }
 
 
 type Mode
@@ -62,21 +64,11 @@ type alias ModeInfo =
 
 
 modes =
-    [ { name = "Addition"
-      , value = Addition
-      }
-    , { name = "Subtraktion"
-      , value = Subtraction
-      }
-    , { name = "Multiplikation"
-      , value = Multiplication
-      }
-    , { name = "Division"
-      , value = Division
-      }
-    , { name = "Division, liggande stolen"
-      , value = LongDivision
-      }
+    [ Addition
+    , Subtraction
+    , Multiplication
+    , Division
+    , LongDivision
     ]
 
 
@@ -146,25 +138,37 @@ view model =
 
         -- mode
         , div [ class "no-print" ]
-            (List.map (viewModeSwitcher model.mode) modes)
+            (List.map (viewModeSwitcher model) modes)
 
         -- difficulty settings
-        , div [ class "no-print" ]
-            [ div [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_from), onInput (\x -> SetAFrom (String.toInt x)), class "slider" ] [], text (String.fromInt model.a_range_from) ]
-            , div [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_to), onInput (\x -> SetATo (String.toInt x)), class "slider" ] [], text (String.fromInt model.a_range_to) ]
-            , div [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_from), onInput (\x -> SetBFrom (String.toInt x)), class "slider" ] [], text (String.fromInt model.b_range_from) ]
-            , div [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_to), onInput (\x -> SetBTo (String.toInt x)), class "slider" ] [], text (String.fromInt model.b_range_to) ]
+        , table [ class "no-print" ]
+            [ tr []
+                [ td [] [ text (fromLabel model ++ " " ++ String.fromInt model.a_range_from) ]
+                , td [] [ text (toLabel model ++ " " ++ String.fromInt model.a_range_to) ]
+                ]
+            , tr []
+                [ td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_from), onInput (\x -> SetAFrom (String.toInt x)), class "slider" ] [] ]
+                , td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_to), onInput (\x -> SetATo (String.toInt x)), class "slider" ] [] ]
+                ]
+            , tr []
+                [ td [] [ text (fromLabel model ++ " " ++ String.fromInt model.b_range_from) ]
+                , td [] [ text (toLabel model ++ " " ++ String.fromInt model.b_range_to) ]
+                ]
+            , tr []
+                [ td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_from), onInput (\x -> SetBFrom (String.toInt x)), class "slider" ] [] ]
+                , td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_to), onInput (\x -> SetBTo (String.toInt x)), class "slider" ] [] ]
+                ]
             ]
         , div [] (List.map (viewProblem model) (List.range 0 188))
         ]
 
 
-viewModeSwitcher : Mode -> ModeInfo -> Html Msg
-viewModeSwitcher mode modeInfo =
+viewModeSwitcher : Model -> Mode -> Html Msg
+viewModeSwitcher model mode =
     div [ class "mode" ]
         [ label []
-            [ text modeInfo.name
-            , input [ type_ "radio", name "mode", checked (mode == modeInfo.value), onClick (SetMode modeInfo.value) ] []
+            [ input [ type_ "radio", name "mode", checked (model.mode == mode), onClick (SetMode mode) ] []
+            , text (modeLabel mode model)
             ]
         ]
 
@@ -225,9 +229,15 @@ viewProblem model i =
                 ]
 
         LongDivision ->
-            div [ class "problem long-division" ]
-                [ div [ class "both" ] [ span [ class "a" ] [ text a_times_b_s ], span [ class "b" ] [ text b_s ] ]
-                ]
+            if String.startsWith "sv" model.flags.language then
+                div [ class "problem long-division-sv" ]
+                    [ div [ class "both" ] [ span [ class "a" ] [ text a_times_b_s ], span [ class "b" ] [ text b_s ] ]
+                    ]
+
+            else
+                div [ class "problem long-division-en" ]
+                    [ div [ class "both" ] [ span [ class "b" ] [ text (b_s ++ ")") ], span [ class "a" ] [ text a_times_b_s ] ]
+                    ]
 
 
 min_ : String -> Attribute msg
@@ -238,3 +248,62 @@ min_ =
 max_ : String -> Attribute msg
 max_ =
     Html.Attributes.max
+
+
+
+--- TRANSLATIONS
+
+
+modeLabel : Mode -> Model -> String
+modeLabel mode model =
+    if String.startsWith "sv" model.flags.language then
+        case mode of
+            Addition ->
+                "Addition"
+
+            Subtraction ->
+                "Subtraktion"
+
+            Multiplication ->
+                "Multiplikation"
+
+            Division ->
+                "Division"
+
+            LongDivision ->
+                "Division, liggande stolen"
+
+    else
+        case mode of
+            Addition ->
+                "Addition"
+
+            Subtraction ->
+                "Subtraction"
+
+            Multiplication ->
+                "Multiplication"
+
+            Division ->
+                "Division"
+
+            LongDivision ->
+                "Long division"
+
+
+fromLabel : Model -> String
+fromLabel model =
+    if String.startsWith "sv" model.flags.language then
+        "Från"
+
+    else
+        "From"
+
+
+toLabel : Model -> String
+toLabel model =
+    if String.startsWith "sv" model.flags.language then
+        "Till"
+
+    else
+        "To"
