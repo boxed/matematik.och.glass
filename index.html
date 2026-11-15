@@ -102,7 +102,53 @@
             border-bottom: 1px solid black;
         }
 
+        .table-picker label {
+            display: inline-block;
+            margin: 0.5rem 0.75rem 1rem 0;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .tables {
+            max-width: 19cm;
+            text-align: center;
+        }
+
+        .times-table {
+            display: inline-table;
+            border-collapse: collapse;
+            margin: 0 0.6cm 1cm 0.6cm;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1.4rem;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .times-table td {
+            height: 0.95cm;
+            padding: 0 0.15rem;
+            vertical-align: bottom;
+        }
+
+        .times-table td.n {
+            text-align: right;
+            min-width: 1.3rem;
+        }
+
+        .times-table td.answer {
+            width: 1.8cm;
+            border-bottom: 1px solid #999;
+        }
+
         @media print {
+            @page {
+                margin: 1.5cm 1cm;
+            }
+
+            html, body {
+                display: block;
+            }
+
             .no-print {
                 display: none;
             }

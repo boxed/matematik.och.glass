@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.P.E === region.U.E)
+	if (region.Q.G === region.V.G)
 	{
-		return 'on line ' + region.P.E;
+		return 'on line ' + region.Q.G;
 	}
-	return 'on lines ' + region.P.E + ' through ' + region.U.E;
+	return 'on lines ' + region.Q.G + ' through ' + region.V.G;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
-		impl.aI,
-		impl.aG,
+		impl.aB,
+		impl.aJ,
+		impl.aH,
 		function() { return function() {} }
 	);
 });
@@ -2719,9 +2719,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		n: func(record.n),
-		Q: record.Q,
-		N: record.N
+		o: func(record.o),
+		R: record.R,
+		O: record.O
 	}
 });
 
@@ -2989,11 +2989,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.n;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Q;
+		var message = !tag ? value : tag < 3 ? value.a : value.o;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.R;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.N) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.O) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,11 +3943,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
-		impl.aI,
-		impl.aG,
+		impl.aB,
+		impl.aJ,
+		impl.aH,
 		function(sendToApp, initialModel) {
-			var view = impl.aK;
+			var view = impl.aL;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
-		impl.aI,
-		impl.aG,
+		impl.aB,
+		impl.aJ,
+		impl.aH,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.O && impl.O(sendToApp)
-			var view = impl.aK;
+			var divertHrefToApp = impl.P && impl.P(sendToApp)
+			var view = impl.aL;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,12 +3992,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.at);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.au);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aH) && (_VirtualDom_doc.title = title = doc.aH);
+				(title !== doc.aI) && (_VirtualDom_doc.title = title = doc.aI);
 			});
 		}
 	);
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aC;
-	var onUrlRequest = impl.aD;
+	var onUrlChange = impl.aD;
+	var onUrlRequest = impl.aE;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		O: function(sendToApp)
+		P: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ag === next.ag
-							&& curr.Y === next.Y
-							&& curr.ad.a === next.ad.a
+							&& curr.ah === next.ah
+							&& curr.Z === next.Z
+							&& curr.ae.a === next.ae.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aA: function(flags)
+		aB: function(flags)
 		{
-			return A3(impl.aA, flags, _Browser_getUrl(), key);
+			return A3(impl.aB, flags, _Browser_getUrl(), key);
 		},
-		aK: impl.aK,
-		aI: impl.aI,
-		aG: impl.aG
+		aL: impl.aL,
+		aJ: impl.aJ,
+		aH: impl.aH
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { ay: 'hidden', au: 'visibilitychange' }
+		? { az: 'hidden', av: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { ay: 'mozHidden', au: 'mozvisibilitychange' }
+		? { az: 'mozHidden', av: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { ay: 'msHidden', au: 'msvisibilitychange' }
+		? { az: 'msHidden', av: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { ay: 'webkitHidden', au: 'webkitvisibilitychange' }
-		: { ay: 'hidden', au: 'visibilitychange' };
+		? { az: 'webkitHidden', av: 'webkitvisibilitychange' }
+		: { az: 'hidden', av: 'visibilitychange' };
 }
 
 
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		ak: _Browser_getScene(),
-		an: {
-			ap: _Browser_window.pageXOffset,
-			aq: _Browser_window.pageYOffset,
-			ao: _Browser_doc.documentElement.clientWidth,
-			X: _Browser_doc.documentElement.clientHeight
+		al: _Browser_getScene(),
+		ao: {
+			aq: _Browser_window.pageXOffset,
+			ar: _Browser_window.pageYOffset,
+			ap: _Browser_doc.documentElement.clientWidth,
+			Y: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4262,8 +4262,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		ao: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		X: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		ap: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		Y: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			ak: {
-				ao: node.scrollWidth,
-				X: node.scrollHeight
+			al: {
+				ap: node.scrollWidth,
+				Y: node.scrollHeight
 			},
-			an: {
-				ap: node.scrollLeft,
-				aq: node.scrollTop,
-				ao: node.clientWidth,
-				X: node.clientHeight
+			ao: {
+				aq: node.scrollLeft,
+				ar: node.scrollTop,
+				ap: node.clientWidth,
+				Y: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			ak: _Browser_getScene(),
-			an: {
-				ap: x,
-				aq: y,
-				ao: _Browser_doc.documentElement.clientWidth,
-				X: _Browser_doc.documentElement.clientHeight
+			al: _Browser_getScene(),
+			ao: {
+				aq: x,
+				ar: y,
+				ap: _Browser_doc.documentElement.clientWidth,
+				Y: _Browser_doc.documentElement.clientHeight
 			},
-			aw: {
-				ap: x + rect.left,
-				aq: y + rect.top,
-				ao: rect.width,
-				X: rect.height
+			ax: {
+				aq: x + rect.left,
+				ar: y + rect.top,
+				ap: rect.width,
+				Y: rect.height
 			}
 		};
 	});
@@ -4958,7 +4958,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {W: fragment, Y: host, ab: path, ad: port_, ag: protocol, ah: query};
+		return {X: fragment, Z: host, ac: path, ae: port_, ah: protocol, ai: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5242,6 +5242,10 @@ var $author$project$Matematik$Addition = 0;
 var $author$project$Matematik$GotRandomNumber = function (a) {
 	return {$: 0, a: a};
 };
+var $elm$core$Set$Set_elm_builtin = $elm$core$Basics$identity;
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$Set$empty = $elm$core$Dict$empty;
 var $elm$random$Random$Generate = $elm$core$Basics$identity;
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
@@ -5383,7 +5387,7 @@ var $elm$random$Random$int = F2(
 	});
 var $author$project$Matematik$init = function (flags) {
 	return _Utils_Tuple2(
-		{u: 12, v: 120, w: 5, x: 40, z: flags, F: 0, K: 0},
+		{w: 12, x: 120, y: 5, z: 40, B: flags, s: 0, L: 0, m: $elm$core$Set$empty},
 		A2(
 			$elm$random$Random$generate,
 			$author$project$Matematik$GotRandomNumber,
@@ -5392,8 +5396,534 @@ var $author$project$Matematik$init = function (flags) {
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$core$Dict$Black = 1;
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = 0;
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === -1) && (!right.a)) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === -1) && (!left.a)) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === -2) {
+			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1) {
+				case 0:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 1:
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === -1) && (!_v0.a)) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Set$insert = F2(
+	function (key, _v0) {
+		var dict = _v0;
+		return A3($elm$core$Dict$insert, key, 0, dict);
+	});
+var $elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === -2) {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
+				switch (_v1) {
+					case 0:
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 1:
+						return $elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
+		}
+	});
+var $elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _v0 = A2($elm$core$Dict$get, key, dict);
+		if (!_v0.$) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var $elm$core$Set$member = F2(
+	function (key, _v0) {
+		var dict = _v0;
+		return A2($elm$core$Dict$member, key, dict);
+	});
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $elm$core$Dict$getMin = function (dict) {
+	getMin:
+	while (true) {
+		if ((dict.$ === -1) && (dict.d.$ === -1)) {
+			var left = dict.d;
+			var $temp$dict = left;
+			dict = $temp$dict;
+			continue getMin;
+		} else {
+			return dict;
+		}
+	}
+};
+var $elm$core$Dict$moveRedLeft = function (dict) {
+	if (((dict.$ === -1) && (dict.d.$ === -1)) && (dict.e.$ === -1)) {
+		if ((dict.e.d.$ === -1) && (!dict.e.d.a)) {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _v1 = dict.d;
+			var lClr = _v1.a;
+			var lK = _v1.b;
+			var lV = _v1.c;
+			var lLeft = _v1.d;
+			var lRight = _v1.e;
+			var _v2 = dict.e;
+			var rClr = _v2.a;
+			var rK = _v2.b;
+			var rV = _v2.c;
+			var rLeft = _v2.d;
+			var _v3 = rLeft.a;
+			var rlK = rLeft.b;
+			var rlV = rLeft.c;
+			var rlL = rLeft.d;
+			var rlR = rLeft.e;
+			var rRight = _v2.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				0,
+				rlK,
+				rlV,
+				A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					1,
+					k,
+					v,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, lK, lV, lLeft, lRight),
+					rlL),
+				A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rlR, rRight));
+		} else {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _v4 = dict.d;
+			var lClr = _v4.a;
+			var lK = _v4.b;
+			var lV = _v4.c;
+			var lLeft = _v4.d;
+			var lRight = _v4.e;
+			var _v5 = dict.e;
+			var rClr = _v5.a;
+			var rK = _v5.b;
+			var rV = _v5.c;
+			var rLeft = _v5.d;
+			var rRight = _v5.e;
+			if (clr === 1) {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					1,
+					k,
+					v,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					1,
+					k,
+					v,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, rK, rV, rLeft, rRight));
+			}
+		}
+	} else {
+		return dict;
+	}
+};
+var $elm$core$Dict$moveRedRight = function (dict) {
+	if (((dict.$ === -1) && (dict.d.$ === -1)) && (dict.e.$ === -1)) {
+		if ((dict.d.d.$ === -1) && (!dict.d.d.a)) {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _v1 = dict.d;
+			var lClr = _v1.a;
+			var lK = _v1.b;
+			var lV = _v1.c;
+			var _v2 = _v1.d;
+			var _v3 = _v2.a;
+			var llK = _v2.b;
+			var llV = _v2.c;
+			var llLeft = _v2.d;
+			var llRight = _v2.e;
+			var lRight = _v1.e;
+			var _v4 = dict.e;
+			var rClr = _v4.a;
+			var rK = _v4.b;
+			var rV = _v4.c;
+			var rLeft = _v4.d;
+			var rRight = _v4.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				0,
+				lK,
+				lV,
+				A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+				A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					1,
+					k,
+					v,
+					lRight,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, rK, rV, rLeft, rRight)));
+		} else {
+			var clr = dict.a;
+			var k = dict.b;
+			var v = dict.c;
+			var _v5 = dict.d;
+			var lClr = _v5.a;
+			var lK = _v5.b;
+			var lV = _v5.c;
+			var lLeft = _v5.d;
+			var lRight = _v5.e;
+			var _v6 = dict.e;
+			var rClr = _v6.a;
+			var rK = _v6.b;
+			var rV = _v6.c;
+			var rLeft = _v6.d;
+			var rRight = _v6.e;
+			if (clr === 1) {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					1,
+					k,
+					v,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					1,
+					k,
+					v,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, rK, rV, rLeft, rRight));
+			}
+		}
+	} else {
+		return dict;
+	}
+};
+var $elm$core$Dict$removeHelpPrepEQGT = F7(
+	function (targetKey, dict, color, key, value, left, right) {
+		if ((left.$ === -1) && (!left.a)) {
+			var _v1 = left.a;
+			var lK = left.b;
+			var lV = left.c;
+			var lLeft = left.d;
+			var lRight = left.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				color,
+				lK,
+				lV,
+				lLeft,
+				A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, lRight, right));
+		} else {
+			_v2$2:
+			while (true) {
+				if ((right.$ === -1) && (right.a === 1)) {
+					if (right.d.$ === -1) {
+						if (right.d.a === 1) {
+							var _v3 = right.a;
+							var _v4 = right.d;
+							var _v5 = _v4.a;
+							return $elm$core$Dict$moveRedRight(dict);
+						} else {
+							break _v2$2;
+						}
+					} else {
+						var _v6 = right.a;
+						var _v7 = right.d;
+						return $elm$core$Dict$moveRedRight(dict);
+					}
+				} else {
+					break _v2$2;
+				}
+			}
+			return dict;
+		}
+	});
+var $elm$core$Dict$removeMin = function (dict) {
+	if ((dict.$ === -1) && (dict.d.$ === -1)) {
+		var color = dict.a;
+		var key = dict.b;
+		var value = dict.c;
+		var left = dict.d;
+		var lColor = left.a;
+		var lLeft = left.d;
+		var right = dict.e;
+		if (lColor === 1) {
+			if ((lLeft.$ === -1) && (!lLeft.a)) {
+				var _v3 = lLeft.a;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					key,
+					value,
+					$elm$core$Dict$removeMin(left),
+					right);
+			} else {
+				var _v4 = $elm$core$Dict$moveRedLeft(dict);
+				if (_v4.$ === -1) {
+					var nColor = _v4.a;
+					var nKey = _v4.b;
+					var nValue = _v4.c;
+					var nLeft = _v4.d;
+					var nRight = _v4.e;
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						$elm$core$Dict$removeMin(nLeft),
+						nRight);
+				} else {
+					return $elm$core$Dict$RBEmpty_elm_builtin;
+				}
+			}
+		} else {
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				color,
+				key,
+				value,
+				$elm$core$Dict$removeMin(left),
+				right);
+		}
+	} else {
+		return $elm$core$Dict$RBEmpty_elm_builtin;
+	}
+};
+var $elm$core$Dict$removeHelp = F2(
+	function (targetKey, dict) {
+		if (dict.$ === -2) {
+			return $elm$core$Dict$RBEmpty_elm_builtin;
+		} else {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			if (_Utils_cmp(targetKey, key) < 0) {
+				if ((left.$ === -1) && (left.a === 1)) {
+					var _v4 = left.a;
+					var lLeft = left.d;
+					if ((lLeft.$ === -1) && (!lLeft.a)) {
+						var _v6 = lLeft.a;
+						return A5(
+							$elm$core$Dict$RBNode_elm_builtin,
+							color,
+							key,
+							value,
+							A2($elm$core$Dict$removeHelp, targetKey, left),
+							right);
+					} else {
+						var _v7 = $elm$core$Dict$moveRedLeft(dict);
+						if (_v7.$ === -1) {
+							var nColor = _v7.a;
+							var nKey = _v7.b;
+							var nValue = _v7.c;
+							var nLeft = _v7.d;
+							var nRight = _v7.e;
+							return A5(
+								$elm$core$Dict$balance,
+								nColor,
+								nKey,
+								nValue,
+								A2($elm$core$Dict$removeHelp, targetKey, nLeft),
+								nRight);
+						} else {
+							return $elm$core$Dict$RBEmpty_elm_builtin;
+						}
+					}
+				} else {
+					return A5(
+						$elm$core$Dict$RBNode_elm_builtin,
+						color,
+						key,
+						value,
+						A2($elm$core$Dict$removeHelp, targetKey, left),
+						right);
+				}
+			} else {
+				return A2(
+					$elm$core$Dict$removeHelpEQGT,
+					targetKey,
+					A7($elm$core$Dict$removeHelpPrepEQGT, targetKey, dict, color, key, value, left, right));
+			}
+		}
+	});
+var $elm$core$Dict$removeHelpEQGT = F2(
+	function (targetKey, dict) {
+		if (dict.$ === -1) {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			if (_Utils_eq(targetKey, key)) {
+				var _v1 = $elm$core$Dict$getMin(right);
+				if (_v1.$ === -1) {
+					var minKey = _v1.b;
+					var minValue = _v1.c;
+					return A5(
+						$elm$core$Dict$balance,
+						color,
+						minKey,
+						minValue,
+						left,
+						$elm$core$Dict$removeMin(right));
+				} else {
+					return $elm$core$Dict$RBEmpty_elm_builtin;
+				}
+			} else {
+				return A5(
+					$elm$core$Dict$balance,
+					color,
+					key,
+					value,
+					left,
+					A2($elm$core$Dict$removeHelp, targetKey, right));
+			}
+		} else {
+			return $elm$core$Dict$RBEmpty_elm_builtin;
+		}
+	});
+var $elm$core$Dict$remove = F2(
+	function (key, dict) {
+		var _v0 = A2($elm$core$Dict$removeHelp, key, dict);
+		if ((_v0.$ === -1) && (!_v0.a)) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Set$remove = F2(
+	function (key, _v0) {
+		var dict = _v0;
+		return A2($elm$core$Dict$remove, key, dict);
+	});
 var $author$project$Matematik$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5402,40 +5932,16 @@ var $author$project$Matematik$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{K: x}),
+						{L: x}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
 				var mode = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{F: mode}),
+						{s: mode}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
-				var _int = msg.a;
-				if (!_int.$) {
-					var x = _int.a;
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{u: x}),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
-			case 3:
-				var _int = msg.a;
-				if (!_int.$) {
-					var x = _int.a;
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{v: x}),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
-			case 4:
 				var _int = msg.a;
 				if (!_int.$) {
 					var x = _int.a;
@@ -5447,7 +5953,7 @@ var $author$project$Matematik$update = F2(
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			default:
+			case 3:
 				var _int = msg.a;
 				if (!_int.$) {
 					var x = _int.a;
@@ -5459,20 +5965,48 @@ var $author$project$Matematik$update = F2(
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
+			case 4:
+				var _int = msg.a;
+				if (!_int.$) {
+					var x = _int.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{y: x}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 6:
+				var n = msg.a;
+				return A2($elm$core$Set$member, n, model.m) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							m: A2($elm$core$Set$remove, n, model.m)
+						}),
+					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							m: A2($elm$core$Set$insert, n, model.m)
+						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var _int = msg.a;
+				if (!_int.$) {
+					var x = _int.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{z: x}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
 		}
 	});
-var $author$project$Matematik$SetAFrom = function (a) {
-	return {$: 2, a: a};
-};
-var $author$project$Matematik$SetATo = function (a) {
-	return {$: 3, a: a};
-};
-var $author$project$Matematik$SetBFrom = function (a) {
-	return {$: 4, a: a};
-};
-var $author$project$Matematik$SetBTo = function (a) {
-	return {$: 5, a: a};
-};
+var $author$project$Matematik$MultiplicationTables = 5;
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5483,65 +6017,15 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $author$project$Matematik$fromLabel = function (model) {
-	return A2($elm$core$String$startsWith, 'sv', model.z.A) ? 'Från' : 'From';
-};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$html$Html$input = _VirtualDom_node('input');
-var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
-var $author$project$Matematik$max_ = $elm$html$Html$Attributes$max;
-var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
-var $author$project$Matematik$min_ = $elm$html$Html$Attributes$min;
 var $author$project$Matematik$Division = 3;
 var $author$project$Matematik$LongDivision = 4;
 var $author$project$Matematik$Multiplication = 2;
 var $author$project$Matematik$Subtraction = 1;
 var $author$project$Matematik$modes = _List_fromArray(
-	[0, 1, 2, 3, 4]);
-var $elm$html$Html$Events$alwaysStop = function (x) {
-	return _Utils_Tuple2(x, true);
-};
-var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
-	return {$: 1, a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$stopPropagationOn = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
-	});
-var $elm$html$Html$Events$targetValue = A2(
-	$elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	$elm$json$Json$Decode$string);
-var $elm$html$Html$Events$onInput = function (tagger) {
-	return A2(
-		$elm$html$Html$Events$stopPropagationOn,
-		'input',
-		A2(
-			$elm$json$Json$Decode$map,
-			$elm$html$Html$Events$alwaysStop,
-			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
-};
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $elm$html$Html$table = _VirtualDom_node('table');
-var $elm$html$Html$td = _VirtualDom_node('td');
+	[0, 1, 2, 3, 4, 5]);
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Matematik$toLabel = function (model) {
-	return A2($elm$core$String$startsWith, 'sv', model.z.A) ? 'Till' : 'To';
-};
-var $elm$html$Html$tr = _VirtualDom_node('tr');
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Matematik$SetMode = function (a) {
 	return {$: 1, a: a};
 };
@@ -5554,10 +6038,11 @@ var $elm$html$Html$Attributes$boolProperty = F2(
 			$elm$json$Json$Encode$bool(bool));
 	});
 var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $author$project$Matematik$modeLabel = F2(
 	function (mode, model) {
-		if (A2($elm$core$String$startsWith, 'sv', model.z.A)) {
+		if (A2($elm$core$String$startsWith, 'sv', model.B.C)) {
 			switch (mode) {
 				case 0:
 					return 'Addition';
@@ -5567,8 +6052,10 @@ var $author$project$Matematik$modeLabel = F2(
 					return 'Multiplikation';
 				case 3:
 					return 'Division';
-				default:
+				case 4:
 					return 'Division, liggande stolen';
+				default:
+					return 'Multiplikationstabeller';
 			}
 		} else {
 			switch (mode) {
@@ -5580,8 +6067,10 @@ var $author$project$Matematik$modeLabel = F2(
 					return 'Multiplication';
 				case 3:
 					return 'Division';
-				default:
+				case 4:
 					return 'Long division';
+				default:
+					return 'Multiplication tables';
 			}
 		}
 	});
@@ -5589,6 +6078,7 @@ var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('n
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$on = F2(
 	function (event, decoder) {
 		return A2(
@@ -5602,6 +6092,7 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $author$project$Matematik$viewModeSwitcher = F2(
 	function (model, mode) {
 		return A2(
@@ -5624,7 +6115,7 @@ var $author$project$Matematik$viewModeSwitcher = F2(
 									$elm$html$Html$Attributes$type_('radio'),
 									$elm$html$Html$Attributes$name('mode'),
 									$elm$html$Html$Attributes$checked(
-									_Utils_eq(model.F, mode)),
+									_Utils_eq(model.s, mode)),
 									$elm$html$Html$Events$onClick(
 									$author$project$Matematik$SetMode(mode))
 								]),
@@ -5663,9 +6154,9 @@ var $elm$core$String$padRight = F3(
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $author$project$Matematik$viewProblem = F2(
 	function (model, i) {
-		var low = A2($elm$random$Random$int, model.w, model.x);
-		var high = A2($elm$random$Random$int, model.u, model.v);
-		var g = $elm$random$Random$initialSeed(model.K + i);
+		var low = A2($elm$random$Random$int, model.y, model.z);
+		var high = A2($elm$random$Random$int, model.w, model.x);
+		var g = $elm$random$Random$initialSeed(model.L + i);
 		var _v0 = A2($elm$random$Random$step, high, g);
 		var a = _v0.a;
 		var g2 = _v0.b;
@@ -5678,8 +6169,10 @@ var $author$project$Matematik$viewProblem = F2(
 			$elm$core$Basics$max,
 			$elm$core$String$length(a_s),
 			$elm$core$String$length(b_s)) + 1;
-		var _v2 = model.F;
+		var _v2 = model.s;
 		switch (_v2) {
+			case 5:
+				return $elm$html$Html$text('');
 			case 0:
 				return A2(
 					$elm$html$Html$div,
@@ -5791,7 +6284,7 @@ var $author$project$Matematik$viewProblem = F2(
 								]))
 						]));
 			default:
-				return A2($elm$core$String$startsWith, 'sv', model.z.A) ? A2(
+				return A2($elm$core$String$startsWith, 'sv', model.B.C) ? A2(
 					$elm$html$Html$div,
 					_List_fromArray(
 						[
@@ -5868,6 +6361,325 @@ var $author$project$Matematik$viewProblem = F2(
 						]));
 		}
 	});
+var $author$project$Matematik$SetAFrom = function (a) {
+	return {$: 2, a: a};
+};
+var $author$project$Matematik$SetATo = function (a) {
+	return {$: 3, a: a};
+};
+var $author$project$Matematik$SetBFrom = function (a) {
+	return {$: 4, a: a};
+};
+var $author$project$Matematik$SetBTo = function (a) {
+	return {$: 5, a: a};
+};
+var $author$project$Matematik$fromLabel = function (model) {
+	return A2($elm$core$String$startsWith, 'sv', model.B.C) ? 'Från' : 'From';
+};
+var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
+var $author$project$Matematik$max_ = $elm$html$Html$Attributes$max;
+var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
+var $author$project$Matematik$min_ = $elm$html$Html$Attributes$min;
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $elm$html$Html$table = _VirtualDom_node('table');
+var $elm$html$Html$td = _VirtualDom_node('td');
+var $author$project$Matematik$toLabel = function (model) {
+	return A2($elm$core$String$startsWith, 'sv', model.B.C) ? 'Till' : 'To';
+};
+var $elm$html$Html$tr = _VirtualDom_node('tr');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Matematik$viewRangeSettings = function (model) {
+	return A2(
+		$elm$html$Html$table,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('no-print')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$tr,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.w)))
+							])),
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.x)))
+							]))
+					])),
+				A2(
+				$elm$html$Html$tr,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.w)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetAFrom(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil)
+							])),
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.x)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetATo(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil)
+							]))
+					])),
+				A2(
+				$elm$html$Html$tr,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.y)))
+							])),
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.z)))
+							]))
+					])),
+				A2(
+				$elm$html$Html$tr,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.y)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetBFrom(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil)
+							])),
+						A2(
+						$elm$html$Html$td,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'width', '400px'),
+										$elm$html$Html$Attributes$type_('range'),
+										$author$project$Matematik$min_('0'),
+										$author$project$Matematik$max_('500'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.z)),
+										$elm$html$Html$Events$onInput(
+										function (x) {
+											return $author$project$Matematik$SetBTo(
+												$elm$core$String$toInt(x));
+										}),
+										$elm$html$Html$Attributes$class('slider')
+									]),
+								_List_Nil)
+							]))
+					]))
+			]));
+};
+var $author$project$Matematik$viewTable = function (n) {
+	return A2(
+		$elm$html$Html$table,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('times-table')
+			]),
+		A2(
+			$elm$core$List$map,
+			function (k) {
+				return A2(
+					$elm$html$Html$tr,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$td,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('n')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									$elm$core$String$fromInt(n))
+								])),
+							A2(
+							$elm$html$Html$td,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('·')
+								])),
+							A2(
+							$elm$html$Html$td,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('n')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									$elm$core$String$fromInt(k))
+								])),
+							A2(
+							$elm$html$Html$td,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('=')
+								])),
+							A2(
+							$elm$html$Html$td,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('answer')
+								]),
+							_List_Nil)
+						]));
+			},
+			A2($elm$core$List$range, 1, 10)));
+};
+var $author$project$Matematik$ToggleTable = function (a) {
+	return {$: 6, a: a};
+};
+var $author$project$Matematik$viewTablesSettings = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('no-print table-picker')
+			]),
+		A2(
+			$elm$core$List$map,
+			function (n) {
+				return A2(
+					$elm$html$Html$label,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$type_('checkbox'),
+									$elm$html$Html$Attributes$checked(
+									A2($elm$core$Set$member, n, model.m)),
+									$elm$html$Html$Events$onClick(
+									$author$project$Matematik$ToggleTable(n))
+								]),
+							_List_Nil),
+							$elm$html$Html$text(
+							$elm$core$String$fromInt(n))
+						]));
+			},
+			A2($elm$core$List$range, 1, 15)));
+};
 var $author$project$Matematik$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -5897,168 +6709,17 @@ var $author$project$Matematik$view = function (model) {
 					$elm$core$List$map,
 					$author$project$Matematik$viewModeSwitcher(model),
 					$author$project$Matematik$modes)),
-				A2(
-				$elm$html$Html$table,
+				(model.s === 5) ? $author$project$Matematik$viewTablesSettings(model) : $author$project$Matematik$viewRangeSettings(model),
+				(model.s === 5) ? A2(
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('no-print')
+						$elm$html$Html$Attributes$class('tables')
 					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.u)))
-									])),
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.v)))
-									]))
-							])),
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
-												A2($elm$html$Html$Attributes$style, 'width', '400px'),
-												$elm$html$Html$Attributes$type_('range'),
-												$author$project$Matematik$min_('0'),
-												$author$project$Matematik$max_('500'),
-												$elm$html$Html$Attributes$value(
-												$elm$core$String$fromInt(model.u)),
-												$elm$html$Html$Events$onInput(
-												function (x) {
-													return $author$project$Matematik$SetAFrom(
-														$elm$core$String$toInt(x));
-												}),
-												$elm$html$Html$Attributes$class('slider')
-											]),
-										_List_Nil)
-									])),
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
-												A2($elm$html$Html$Attributes$style, 'width', '400px'),
-												$elm$html$Html$Attributes$type_('range'),
-												$author$project$Matematik$min_('0'),
-												$author$project$Matematik$max_('500'),
-												$elm$html$Html$Attributes$value(
-												$elm$core$String$fromInt(model.v)),
-												$elm$html$Html$Events$onInput(
-												function (x) {
-													return $author$project$Matematik$SetATo(
-														$elm$core$String$toInt(x));
-												}),
-												$elm$html$Html$Attributes$class('slider')
-											]),
-										_List_Nil)
-									]))
-							])),
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.w)))
-									])),
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.x)))
-									]))
-							])),
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
-												A2($elm$html$Html$Attributes$style, 'width', '400px'),
-												$elm$html$Html$Attributes$type_('range'),
-												$author$project$Matematik$min_('0'),
-												$author$project$Matematik$max_('500'),
-												$elm$html$Html$Attributes$value(
-												$elm$core$String$fromInt(model.w)),
-												$elm$html$Html$Events$onInput(
-												function (x) {
-													return $author$project$Matematik$SetBFrom(
-														$elm$core$String$toInt(x));
-												}),
-												$elm$html$Html$Attributes$class('slider')
-											]),
-										_List_Nil)
-									])),
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
-												A2($elm$html$Html$Attributes$style, 'width', '400px'),
-												$elm$html$Html$Attributes$type_('range'),
-												$author$project$Matematik$min_('0'),
-												$author$project$Matematik$max_('500'),
-												$elm$html$Html$Attributes$value(
-												$elm$core$String$fromInt(model.x)),
-												$elm$html$Html$Events$onInput(
-												function (x) {
-													return $author$project$Matematik$SetBTo(
-														$elm$core$String$toInt(x));
-												}),
-												$elm$html$Html$Attributes$class('slider')
-											]),
-										_List_Nil)
-									]))
-							]))
-					])),
 				A2(
+					$elm$core$List$map,
+					$author$project$Matematik$viewTable,
+					$elm$core$Set$toList(model.m))) : A2(
 				$elm$html$Html$div,
 				_List_Nil,
 				A2(
@@ -6069,18 +6730,18 @@ var $author$project$Matematik$view = function (model) {
 };
 var $author$project$Matematik$main = $elm$browser$Browser$element(
 	{
-		aA: $author$project$Matematik$init,
-		aG: function (_v0) {
+		aB: $author$project$Matematik$init,
+		aH: function (_v0) {
 			return $elm$core$Platform$Sub$none;
 		},
-		aI: $author$project$Matematik$update,
-		aK: $author$project$Matematik$view
+		aJ: $author$project$Matematik$update,
+		aL: $author$project$Matematik$view
 	});
 _Platform_export({'Matematik':{'init':$author$project$Matematik$main(
 	A2(
 		$elm$json$Json$Decode$andThen,
 		function (language) {
 			return $elm$json$Json$Decode$succeed(
-				{A: language});
+				{C: language});
 		},
 		A2($elm$json$Json$Decode$field, 'language', $elm$json$Json$Decode$string)))(0)}});}(this));

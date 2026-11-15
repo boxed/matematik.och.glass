@@ -5,6 +5,7 @@ import Html exposing (Attribute, Html, div, h1, input, label, span, table, td, t
 import Html.Attributes exposing (checked, class, name, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Random
+import Set exposing (Set)
 
 
 main =
@@ -24,6 +25,7 @@ init flags =
       , a_range_to = 120
       , b_range_from = 5
       , b_range_to = 40
+      , tables = Set.empty
       , flags = flags
       }
     , Random.generate GotRandomNumber (Random.int 0 100000)
@@ -41,6 +43,7 @@ type alias Model =
     , a_range_to : Int
     , b_range_from : Int
     , b_range_to : Int
+    , tables : Set Int
     , flags : Flags
     }
 
@@ -55,6 +58,7 @@ type Mode
     | Multiplication
     | Division
     | LongDivision
+    | MultiplicationTables
 
 
 type alias ModeInfo =
@@ -69,6 +73,7 @@ modes =
     , Multiplication
     , Division
     , LongDivision
+    , MultiplicationTables
     ]
 
 
@@ -83,6 +88,7 @@ type Msg
     | SetATo (Maybe Int)
     | SetBFrom (Maybe Int)
     | SetBTo (Maybe Int)
+    | ToggleTable Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -118,6 +124,13 @@ update msg model =
                 Nothing ->
                     ( model, Cmd.none )
 
+        ToggleTable n ->
+            if Set.member n model.tables then
+                ( { model | tables = Set.remove n model.tables }, Cmd.none )
+
+            else
+                ( { model | tables = Set.insert n model.tables }, Cmd.none )
+
         SetBTo int ->
             case int of
                 Just x ->
@@ -140,8 +153,54 @@ view model =
         , div [ class "no-print" ]
             (List.map (viewModeSwitcher model) modes)
 
-        -- difficulty settings
-        , table [ class "no-print" ]
+        -- settings and problems
+        , if model.mode == MultiplicationTables then
+            viewTablesSettings model
+
+          else
+            viewRangeSettings model
+        , if model.mode == MultiplicationTables then
+            div [ class "tables" ] (List.map viewTable (Set.toList model.tables))
+
+          else
+            div [] (List.map (viewProblem model) (List.range 0 188))
+        ]
+
+
+viewTablesSettings : Model -> Html Msg
+viewTablesSettings model =
+    div [ class "no-print table-picker" ]
+        (List.map
+            (\n ->
+                label []
+                    [ input [ type_ "checkbox", checked (Set.member n model.tables), onClick (ToggleTable n) ] []
+                    , text (String.fromInt n)
+                    ]
+            )
+            (List.range 1 15)
+        )
+
+
+viewTable : Int -> Html Msg
+viewTable n =
+    table [ class "times-table" ]
+        (List.map
+            (\k ->
+                tr []
+                    [ td [ class "n" ] [ text (String.fromInt n) ]
+                    , td [] [ text "·" ]
+                    , td [ class "n" ] [ text (String.fromInt k) ]
+                    , td [] [ text "=" ]
+                    , td [ class "answer" ] []
+                    ]
+            )
+            (List.range 1 10)
+        )
+
+
+viewRangeSettings : Model -> Html Msg
+viewRangeSettings model =
+    table [ class "no-print" ]
             [ tr []
                 [ td [] [ text (fromLabel model ++ " " ++ String.fromInt model.a_range_from) ]
                 , td [] [ text (toLabel model ++ " " ++ String.fromInt model.a_range_to) ]
@@ -159,8 +218,6 @@ view model =
                 , td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_to), onInput (\x -> SetBTo (String.toInt x)), class "slider" ] [] ]
                 ]
             ]
-        , div [] (List.map (viewProblem model) (List.range 0 188))
-        ]
 
 
 viewModeSwitcher : Model -> Mode -> Html Msg
@@ -206,6 +263,9 @@ viewProblem model i =
             max (String.length a_s) (String.length b_s) + 1
     in
     case model.mode of
+        MultiplicationTables ->
+            text ""
+
         Addition ->
             div [ class "problem addition" ]
                 [ div [ class "a" ] [ text a_s ]
@@ -273,6 +333,9 @@ modeLabel mode model =
             LongDivision ->
                 "Division, liggande stolen"
 
+            MultiplicationTables ->
+                "Multiplikationstabeller"
+
     else
         case mode of
             Addition ->
@@ -289,6 +352,9 @@ modeLabel mode model =
 
             LongDivision ->
                 "Long division"
+
+            MultiplicationTables ->
+                "Multiplication tables"
 
 
 fromLabel : Model -> String
