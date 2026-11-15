@@ -1,6 +1,7 @@
-module Matematik exposing (..)
+port module Matematik exposing (..)
 
 import Browser
+import Dict exposing (Dict)
 import Html exposing (Attribute, Html, div, h1, input, label, span, table, td, text, tr)
 import Html.Attributes exposing (checked, class, name, style, type_, value)
 import Html.Events exposing (onClick, onInput)
@@ -12,24 +13,139 @@ main =
     Browser.element
         { init = init
         , view = view
-        , update = update
+        , update = updateAndSyncUrl
         , subscriptions = \_ -> Sub.none
         }
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( { seed = 0
-      , mode = Addition
-      , a_range_from = 12
-      , a_range_to = 120
-      , b_range_from = 5
-      , b_range_to = 40
-      , tables = Set.empty
-      , flags = flags
-      }
+    ( fromQuery flags.query
+        { seed = 0
+        , mode = Addition
+        , a_range_from = 12
+        , a_range_to = 120
+        , b_range_from = 5
+        , b_range_to = 40
+        , tables = Set.empty
+        , flags = flags
+        }
     , Random.generate GotRandomNumber (Random.int 0 100000)
     )
+
+
+
+-- URL sync
+
+
+port setQuery : String -> Cmd msg
+
+
+updateAndSyncUrl : Msg -> Model -> ( Model, Cmd Msg )
+updateAndSyncUrl msg model =
+    let
+        ( newModel, cmd ) =
+            update msg model
+    in
+    ( newModel, Cmd.batch [ cmd, setQuery (toQuery newModel) ] )
+
+
+modeSlug : Mode -> String
+modeSlug mode =
+    case mode of
+        Addition ->
+            "addition"
+
+        Subtraction ->
+            "subtraction"
+
+        Multiplication ->
+            "multiplication"
+
+        Division ->
+            "division"
+
+        LongDivision ->
+            "long-division"
+
+        MultiplicationTables ->
+            "tables"
+
+
+toQuery : Model -> String
+toQuery model =
+    let
+        params =
+            if model.mode == MultiplicationTables then
+                [ ( "tables", String.join "," (List.map String.fromInt (Set.toList model.tables)) ) ]
+
+            else
+                [ ( "a_from", String.fromInt model.a_range_from )
+                , ( "a_to", String.fromInt model.a_range_to )
+                , ( "b_from", String.fromInt model.b_range_from )
+                , ( "b_to", String.fromInt model.b_range_to )
+                ]
+    in
+    ( "mode", modeSlug model.mode )
+        :: params
+        |> List.map (\( k, v ) -> k ++ "=" ++ v)
+        |> String.join "&"
+
+
+parseQuery : String -> Dict String String
+parseQuery query =
+    (if String.startsWith "?" query then
+        String.dropLeft 1 query
+
+     else
+        query
+    )
+        |> String.split "&"
+        |> List.filterMap
+            (\part ->
+                case String.split "=" part of
+                    [ k, v ] ->
+                        Just ( k, v )
+
+                    _ ->
+                        Nothing
+            )
+        |> Dict.fromList
+
+
+fromQuery : String -> Model -> Model
+fromQuery query model =
+    let
+        params =
+            parseQuery query
+
+        int key default =
+            Dict.get key params
+                |> Maybe.andThen String.toInt
+                |> Maybe.map (clamp 0 500)
+                |> Maybe.withDefault default
+    in
+    { model
+        | mode =
+            Dict.get "mode" params
+                |> Maybe.andThen (\slug -> List.head (List.filter (\m -> modeSlug m == slug) modes))
+                |> Maybe.withDefault model.mode
+        , a_range_from = int "a_from" model.a_range_from
+        , a_range_to = int "a_to" model.a_range_to
+        , b_range_from = int "b_from" model.b_range_from
+        , b_range_to = int "b_to" model.b_range_to
+        , tables =
+            case Dict.get "tables" params of
+                Just v ->
+                    String.split "%2C" v
+                        |> List.concatMap (String.split ",")
+                        |> List.filterMap String.toInt
+                        |> List.filter (\n -> n >= 1 && n <= 15)
+                        |> Set.fromList
+
+                Nothing ->
+                    model.tables
+    }
 
 
 
@@ -49,7 +165,9 @@ type alias Model =
 
 
 type alias Flags =
-    { language : String }
+    { language : String
+    , query : String
+    }
 
 
 type Mode
@@ -189,7 +307,7 @@ viewTable n =
                 tr []
                     [ td [ class "n" ] [ text (String.fromInt n) ]
                     , td [] [ text "·" ]
-                    , td [ class "n" ] [ text (String.fromInt k) ]
+                    , td [ class "k" ] [ text (String.fromInt k) ]
                     , td [] [ text "=" ]
                     , td [ class "answer" ] []
                     ]

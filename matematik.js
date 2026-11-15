@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.Q.G === region.V.G)
+	if (region.R.G === region.W.G)
 	{
-		return 'on line ' + region.Q.G;
+		return 'on line ' + region.R.G;
 	}
-	return 'on lines ' + region.Q.G + ' through ' + region.V.G;
+	return 'on lines ' + region.R.G + ' through ' + region.W.G;
 }
 
 
@@ -2719,8 +2719,8 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		o: func(record.o),
-		R: record.R,
+		t: func(record.t),
+		S: record.S,
 		O: record.O
 	}
 });
@@ -2989,8 +2989,8 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.o;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.R;
+		var message = !tag ? value : tag < 3 ? value.a : value.t;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.S;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
 			(tag == 2 ? value.b : tag == 3 && value.O) && event.preventDefault(),
@@ -3983,7 +3983,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.aJ,
 		impl.aH,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.P && impl.P(sendToApp)
+			var divertHrefToApp = impl.Q && impl.Q(sendToApp)
 			var view = impl.aL;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4058,7 +4058,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		P: function(sendToApp)
+		Q: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ah === next.ah
-							&& curr.Z === next.Z
-							&& curr.ae.a === next.ae.a
+							&& curr.ai === next.ai
+							&& curr._ === next._
+							&& curr.af.a === next.af.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4252,7 +4252,7 @@ function _Browser_getViewport()
 			aq: _Browser_window.pageXOffset,
 			ar: _Browser_window.pageYOffset,
 			ap: _Browser_doc.documentElement.clientWidth,
-			Y: _Browser_doc.documentElement.clientHeight
+			Z: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4263,7 +4263,7 @@ function _Browser_getScene()
 	var elem = _Browser_doc.documentElement;
 	return {
 		ap: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		Y: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		Z: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4288,13 +4288,13 @@ function _Browser_getViewportOf(id)
 		return {
 			al: {
 				ap: node.scrollWidth,
-				Y: node.scrollHeight
+				Z: node.scrollHeight
 			},
 			ao: {
 				aq: node.scrollLeft,
 				ar: node.scrollTop,
 				ap: node.clientWidth,
-				Y: node.clientHeight
+				Z: node.clientHeight
 			}
 		};
 	});
@@ -4329,13 +4329,13 @@ function _Browser_getElement(id)
 				aq: x,
 				ar: y,
 				ap: _Browser_doc.documentElement.clientWidth,
-				Y: _Browser_doc.documentElement.clientHeight
+				Z: _Browser_doc.documentElement.clientHeight
 			},
 			ax: {
 				aq: x + rect.left,
 				ar: y + rect.top,
 				ap: rect.width,
-				Y: rect.height
+				Z: rect.height
 			}
 		};
 	});
@@ -4958,7 +4958,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {X: fragment, Z: host, ac: path, ae: port_, ah: protocol, ai: query};
+		return {Y: fragment, _: host, ad: path, af: port_, ai: protocol, P: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5246,6 +5246,360 @@ var $elm$core$Set$Set_elm_builtin = $elm$core$Basics$identity;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$core$Set$empty = $elm$core$Dict$empty;
+var $elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (!maybeValue.$) {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $elm$core$Basics$clamp = F3(
+	function (low, high, number) {
+		return (_Utils_cmp(number, low) < 0) ? low : ((_Utils_cmp(number, high) > 0) ? high : number);
+	});
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
+};
+var $elm$core$List$concatMap = F2(
+	function (f, list) {
+		return $elm$core$List$concat(
+			A2($elm$core$List$map, f, list));
+	});
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _v0 = f(mx);
+		if (!_v0.$) {
+			var x = _v0.a;
+			return A2($elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var $elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			$elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
+var $elm$core$Dict$Black = 1;
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = 0;
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === -1) && (!right.a)) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === -1) && (!left.a)) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === -2) {
+			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1) {
+				case 0:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 1:
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === -1) && (!_v0.a)) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Set$insert = F2(
+	function (key, _v0) {
+		var dict = _v0;
+		return A3($elm$core$Dict$insert, key, 0, dict);
+	});
+var $elm$core$Set$fromList = function (list) {
+	return A3($elm$core$List$foldl, $elm$core$Set$insert, $elm$core$Set$empty, list);
+};
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === -2) {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
+				switch (_v1) {
+					case 0:
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 1:
+						return $elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
+		}
+	});
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$Matematik$modeSlug = function (mode) {
+	switch (mode) {
+		case 0:
+			return 'addition';
+		case 1:
+			return 'subtraction';
+		case 2:
+			return 'multiplication';
+		case 3:
+			return 'division';
+		case 4:
+			return 'long-division';
+		default:
+			return 'tables';
+	}
+};
+var $author$project$Matematik$Division = 3;
+var $author$project$Matematik$LongDivision = 4;
+var $author$project$Matematik$Multiplication = 2;
+var $author$project$Matematik$MultiplicationTables = 5;
+var $author$project$Matematik$Subtraction = 1;
+var $author$project$Matematik$modes = _List_fromArray(
+	[0, 1, 2, 3, 4, 5]);
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $author$project$Matematik$parseQuery = function (query) {
+	return $elm$core$Dict$fromList(
+		A2(
+			$elm$core$List$filterMap,
+			function (part) {
+				var _v0 = A2($elm$core$String$split, '=', part);
+				if ((_v0.b && _v0.b.b) && (!_v0.b.b.b)) {
+					var k = _v0.a;
+					var _v1 = _v0.b;
+					var v = _v1.a;
+					return $elm$core$Maybe$Just(
+						_Utils_Tuple2(k, v));
+				} else {
+					return $elm$core$Maybe$Nothing;
+				}
+			},
+			A2(
+				$elm$core$String$split,
+				'&',
+				A2($elm$core$String$startsWith, '?', query) ? A2($elm$core$String$dropLeft, 1, query) : query)));
+};
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var $author$project$Matematik$fromQuery = F2(
+	function (query, model) {
+		var params = $author$project$Matematik$parseQuery(query);
+		var _int = F2(
+			function (key, _default) {
+				return A2(
+					$elm$core$Maybe$withDefault,
+					_default,
+					A2(
+						$elm$core$Maybe$map,
+						A2($elm$core$Basics$clamp, 0, 500),
+						A2(
+							$elm$core$Maybe$andThen,
+							$elm$core$String$toInt,
+							A2($elm$core$Dict$get, key, params))));
+			});
+		return _Utils_update(
+			model,
+			{
+				n: A2(_int, 'a_from', model.n),
+				o: A2(_int, 'a_to', model.o),
+				p: A2(_int, 'b_from', model.p),
+				q: A2(_int, 'b_to', model.q),
+				k: A2(
+					$elm$core$Maybe$withDefault,
+					model.k,
+					A2(
+						$elm$core$Maybe$andThen,
+						function (slug) {
+							return $elm$core$List$head(
+								A2(
+									$elm$core$List$filter,
+									function (m) {
+										return _Utils_eq(
+											$author$project$Matematik$modeSlug(m),
+											slug);
+									},
+									$author$project$Matematik$modes));
+						},
+						A2($elm$core$Dict$get, 'mode', params))),
+				i: function () {
+					var _v0 = A2($elm$core$Dict$get, 'tables', params);
+					if (!_v0.$) {
+						var v = _v0.a;
+						return $elm$core$Set$fromList(
+							A2(
+								$elm$core$List$filter,
+								function (n) {
+									return (n >= 1) && (n <= 15);
+								},
+								A2(
+									$elm$core$List$filterMap,
+									$elm$core$String$toInt,
+									A2(
+										$elm$core$List$concatMap,
+										$elm$core$String$split(','),
+										A2($elm$core$String$split, '%2C', v)))));
+					} else {
+						return model.i;
+					}
+				}()
+			});
+	});
 var $elm$random$Random$Generate = $elm$core$Basics$identity;
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
@@ -5387,7 +5741,10 @@ var $elm$random$Random$int = F2(
 	});
 var $author$project$Matematik$init = function (flags) {
 	return _Utils_Tuple2(
-		{w: 12, x: 120, y: 5, z: 40, B: flags, s: 0, L: 0, m: $elm$core$Set$empty},
+		A2(
+			$author$project$Matematik$fromQuery,
+			flags.P,
+			{n: 12, o: 120, p: 5, q: 40, B: flags, k: 0, L: 0, i: $elm$core$Set$empty}),
 		A2(
 			$elm$random$Random$generate,
 			$author$project$Matematik$GotRandomNumber,
@@ -5396,151 +5753,53 @@ var $author$project$Matematik$init = function (flags) {
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $elm$json$Json$Decode$string = _Json_decodeString;
-var $elm$core$Dict$Black = 1;
-var $elm$core$Dict$RBNode_elm_builtin = F5(
-	function (a, b, c, d, e) {
-		return {$: -1, a: a, b: b, c: c, d: d, e: e};
-	});
-var $elm$core$Dict$Red = 0;
-var $elm$core$Dict$balance = F5(
-	function (color, key, value, left, right) {
-		if ((right.$ === -1) && (!right.a)) {
-			var _v1 = right.a;
-			var rK = right.b;
-			var rV = right.c;
-			var rLeft = right.d;
-			var rRight = right.e;
-			if ((left.$ === -1) && (!left.a)) {
-				var _v3 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var lLeft = left.d;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					0,
-					key,
-					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
-			} else {
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					color,
-					rK,
-					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
-					rRight);
-			}
-		} else {
-			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
-				var _v5 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var _v6 = left.d;
-				var _v7 = _v6.a;
-				var llK = _v6.b;
-				var llV = _v6.c;
-				var llLeft = _v6.d;
-				var llRight = _v6.e;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					0,
-					lK,
-					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
-			} else {
-				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
-			}
-		}
-	});
-var $elm$core$Basics$compare = _Utils_compare;
-var $elm$core$Dict$insertHelp = F3(
-	function (key, value, dict) {
-		if (dict.$ === -2) {
-			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-		} else {
-			var nColor = dict.a;
-			var nKey = dict.b;
-			var nValue = dict.c;
-			var nLeft = dict.d;
-			var nRight = dict.e;
-			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1) {
-				case 0:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						A3($elm$core$Dict$insertHelp, key, value, nLeft),
-						nRight);
-				case 1:
-					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
-				default:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						nLeft,
-						A3($elm$core$Dict$insertHelp, key, value, nRight));
-			}
-		}
-	});
-var $elm$core$Dict$insert = F3(
-	function (key, value, dict) {
-		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === -1) && (!_v0.a)) {
-			var _v1 = _v0.a;
-			var k = _v0.b;
-			var v = _v0.c;
-			var l = _v0.d;
-			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
-		} else {
-			var x = _v0;
-			return x;
-		}
-	});
-var $elm$core$Set$insert = F2(
-	function (key, _v0) {
-		var dict = _v0;
-		return A3($elm$core$Dict$insert, key, 0, dict);
-	});
-var $elm$core$Dict$get = F2(
-	function (targetKey, dict) {
-		get:
-		while (true) {
-			if (dict.$ === -2) {
-				return $elm$core$Maybe$Nothing;
-			} else {
-				var key = dict.b;
-				var value = dict.c;
-				var left = dict.d;
-				var right = dict.e;
-				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
-				switch (_v1) {
-					case 0:
-						var $temp$targetKey = targetKey,
-							$temp$dict = left;
-						targetKey = $temp$targetKey;
-						dict = $temp$dict;
-						continue get;
-					case 1:
-						return $elm$core$Maybe$Just(value);
-					default:
-						var $temp$targetKey = targetKey,
-							$temp$dict = right;
-						targetKey = $temp$targetKey;
-						dict = $temp$dict;
-						continue get;
-				}
-			}
-		}
-	});
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Matematik$setQuery = _Platform_outgoingPort('setQuery', $elm$json$Json$Encode$string);
+var $author$project$Matematik$toQuery = function (model) {
+	var params = (model.k === 5) ? _List_fromArray(
+		[
+			_Utils_Tuple2(
+			'tables',
+			A2(
+				$elm$core$String$join,
+				',',
+				A2(
+					$elm$core$List$map,
+					$elm$core$String$fromInt,
+					$elm$core$Set$toList(model.i))))
+		]) : _List_fromArray(
+		[
+			_Utils_Tuple2(
+			'a_from',
+			$elm$core$String$fromInt(model.n)),
+			_Utils_Tuple2(
+			'a_to',
+			$elm$core$String$fromInt(model.o)),
+			_Utils_Tuple2(
+			'b_from',
+			$elm$core$String$fromInt(model.p)),
+			_Utils_Tuple2(
+			'b_to',
+			$elm$core$String$fromInt(model.q))
+		]);
+	return A2(
+		$elm$core$String$join,
+		'&',
+		A2(
+			$elm$core$List$map,
+			function (_v0) {
+				var k = _v0.a;
+				var v = _v0.b;
+				return k + ('=' + v);
+			},
+			A2(
+				$elm$core$List$cons,
+				_Utils_Tuple2(
+					'mode',
+					$author$project$Matematik$modeSlug(model.k)),
+				params)));
+};
 var $elm$core$Dict$member = F2(
 	function (key, dict) {
 		var _v0 = A2($elm$core$Dict$get, key, dict);
@@ -5555,7 +5814,6 @@ var $elm$core$Set$member = F2(
 		var dict = _v0;
 		return A2($elm$core$Dict$member, key, dict);
 	});
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$core$Dict$getMin = function (dict) {
 	getMin:
@@ -5939,7 +6197,7 @@ var $author$project$Matematik$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{s: mode}),
+						{k: mode}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
 				var _int = msg.a;
@@ -5948,7 +6206,7 @@ var $author$project$Matematik$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{w: x}),
+							{n: x}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -5960,7 +6218,7 @@ var $author$project$Matematik$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{x: x}),
+							{o: x}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -5972,24 +6230,24 @@ var $author$project$Matematik$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{y: x}),
+							{p: x}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			case 6:
 				var n = msg.a;
-				return A2($elm$core$Set$member, n, model.m) ? _Utils_Tuple2(
+				return A2($elm$core$Set$member, n, model.i) ? _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							m: A2($elm$core$Set$remove, n, model.m)
+							i: A2($elm$core$Set$remove, n, model.i)
 						}),
 					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							m: A2($elm$core$Set$insert, n, model.m)
+							i: A2($elm$core$Set$insert, n, model.i)
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
@@ -5999,15 +6257,28 @@ var $author$project$Matematik$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{z: x}),
+							{q: x}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 		}
 	});
-var $author$project$Matematik$MultiplicationTables = 5;
-var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Matematik$updateAndSyncUrl = F2(
+	function (msg, model) {
+		var _v0 = A2($author$project$Matematik$update, msg, model);
+		var newModel = _v0.a;
+		var cmd = _v0.b;
+		return _Utils_Tuple2(
+			newModel,
+			$elm$core$Platform$Cmd$batch(
+				_List_fromArray(
+					[
+						cmd,
+						$author$project$Matematik$setQuery(
+						$author$project$Matematik$toQuery(newModel))
+					])));
+	});
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -6018,12 +6289,6 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $author$project$Matematik$Division = 3;
-var $author$project$Matematik$LongDivision = 4;
-var $author$project$Matematik$Multiplication = 2;
-var $author$project$Matematik$Subtraction = 1;
-var $author$project$Matematik$modes = _List_fromArray(
-	[0, 1, 2, 3, 4, 5]);
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Matematik$SetMode = function (a) {
@@ -6115,7 +6380,7 @@ var $author$project$Matematik$viewModeSwitcher = F2(
 									$elm$html$Html$Attributes$type_('radio'),
 									$elm$html$Html$Attributes$name('mode'),
 									$elm$html$Html$Attributes$checked(
-									_Utils_eq(model.s, mode)),
+									_Utils_eq(model.k, mode)),
 									$elm$html$Html$Events$onClick(
 									$author$project$Matematik$SetMode(mode))
 								]),
@@ -6154,8 +6419,8 @@ var $elm$core$String$padRight = F3(
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $author$project$Matematik$viewProblem = F2(
 	function (model, i) {
-		var low = A2($elm$random$Random$int, model.y, model.z);
-		var high = A2($elm$random$Random$int, model.w, model.x);
+		var low = A2($elm$random$Random$int, model.p, model.q);
+		var high = A2($elm$random$Random$int, model.n, model.o);
 		var g = $elm$random$Random$initialSeed(model.L + i);
 		var _v0 = A2($elm$random$Random$step, high, g);
 		var a = _v0.a;
@@ -6169,7 +6434,7 @@ var $author$project$Matematik$viewProblem = F2(
 			$elm$core$Basics$max,
 			$elm$core$String$length(a_s),
 			$elm$core$String$length(b_s)) + 1;
-		var _v2 = model.s;
+		var _v2 = model.k;
 		switch (_v2) {
 			case 5:
 				return $elm$html$Html$text('');
@@ -6440,7 +6705,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.w)))
+								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.n)))
 							])),
 						A2(
 						$elm$html$Html$td,
@@ -6448,7 +6713,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.x)))
+								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.o)))
 							]))
 					])),
 				A2(
@@ -6470,7 +6735,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 										$author$project$Matematik$min_('0'),
 										$author$project$Matematik$max_('500'),
 										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.w)),
+										$elm$core$String$fromInt(model.n)),
 										$elm$html$Html$Events$onInput(
 										function (x) {
 											return $author$project$Matematik$SetAFrom(
@@ -6494,7 +6759,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 										$author$project$Matematik$min_('0'),
 										$author$project$Matematik$max_('500'),
 										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.x)),
+										$elm$core$String$fromInt(model.o)),
 										$elm$html$Html$Events$onInput(
 										function (x) {
 											return $author$project$Matematik$SetATo(
@@ -6516,7 +6781,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.y)))
+								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.p)))
 							])),
 						A2(
 						$elm$html$Html$td,
@@ -6524,7 +6789,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.z)))
+								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.q)))
 							]))
 					])),
 				A2(
@@ -6546,7 +6811,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 										$author$project$Matematik$min_('0'),
 										$author$project$Matematik$max_('500'),
 										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.y)),
+										$elm$core$String$fromInt(model.p)),
 										$elm$html$Html$Events$onInput(
 										function (x) {
 											return $author$project$Matematik$SetBFrom(
@@ -6570,7 +6835,7 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 										$author$project$Matematik$min_('0'),
 										$author$project$Matematik$max_('500'),
 										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.z)),
+										$elm$core$String$fromInt(model.q)),
 										$elm$html$Html$Events$onInput(
 										function (x) {
 											return $author$project$Matematik$SetBTo(
@@ -6620,7 +6885,7 @@ var $author$project$Matematik$viewTable = function (n) {
 							$elm$html$Html$td,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$class('n')
+									$elm$html$Html$Attributes$class('k')
 								]),
 							_List_fromArray(
 								[
@@ -6669,7 +6934,7 @@ var $author$project$Matematik$viewTablesSettings = function (model) {
 								[
 									$elm$html$Html$Attributes$type_('checkbox'),
 									$elm$html$Html$Attributes$checked(
-									A2($elm$core$Set$member, n, model.m)),
+									A2($elm$core$Set$member, n, model.i)),
 									$elm$html$Html$Events$onClick(
 									$author$project$Matematik$ToggleTable(n))
 								]),
@@ -6709,8 +6974,8 @@ var $author$project$Matematik$view = function (model) {
 					$elm$core$List$map,
 					$author$project$Matematik$viewModeSwitcher(model),
 					$author$project$Matematik$modes)),
-				(model.s === 5) ? $author$project$Matematik$viewTablesSettings(model) : $author$project$Matematik$viewRangeSettings(model),
-				(model.s === 5) ? A2(
+				(model.k === 5) ? $author$project$Matematik$viewTablesSettings(model) : $author$project$Matematik$viewRangeSettings(model),
+				(model.k === 5) ? A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
@@ -6719,7 +6984,7 @@ var $author$project$Matematik$view = function (model) {
 				A2(
 					$elm$core$List$map,
 					$author$project$Matematik$viewTable,
-					$elm$core$Set$toList(model.m))) : A2(
+					$elm$core$Set$toList(model.i))) : A2(
 				$elm$html$Html$div,
 				_List_Nil,
 				A2(
@@ -6734,14 +6999,19 @@ var $author$project$Matematik$main = $elm$browser$Browser$element(
 		aH: function (_v0) {
 			return $elm$core$Platform$Sub$none;
 		},
-		aJ: $author$project$Matematik$update,
+		aJ: $author$project$Matematik$updateAndSyncUrl,
 		aL: $author$project$Matematik$view
 	});
 _Platform_export({'Matematik':{'init':$author$project$Matematik$main(
 	A2(
 		$elm$json$Json$Decode$andThen,
-		function (language) {
-			return $elm$json$Json$Decode$succeed(
-				{C: language});
+		function (query) {
+			return A2(
+				$elm$json$Json$Decode$andThen,
+				function (language) {
+					return $elm$json$Json$Decode$succeed(
+						{C: language, P: query});
+				},
+				A2($elm$json$Json$Decode$field, 'language', $elm$json$Json$Decode$string));
 		},
-		A2($elm$json$Json$Decode$field, 'language', $elm$json$Json$Decode$string)))(0)}});}(this));
+		A2($elm$json$Json$Decode$field, 'query', $elm$json$Json$Decode$string)))(0)}});}(this));

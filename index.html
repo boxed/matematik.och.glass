@@ -126,13 +126,16 @@
 
         .times-table td {
             height: 0.95cm;
-            padding: 0 0.15rem;
+            padding: 0 0.2rem;
             vertical-align: bottom;
         }
 
         .times-table td.n {
             text-align: right;
-            min-width: 1.3rem;
+        }
+
+        .times-table td.k {
+            text-align: left;
         }
 
         .times-table td.answer {
@@ -166,7 +169,10 @@
     </noscript>
 
     <script>
-        var app = Elm.Matematik.init({node: document.getElementById('main'), flags: {language: navigator.language}});
+        var app = Elm.Matematik.init({node: document.getElementById('main'), flags: {language: navigator.language, query: location.search}});
+        app.ports.setQuery.subscribe(function (query) {
+            history.replaceState(null, '', location.pathname + '?' + query + location.hash);
+        });
     </script>
 
 </html>
