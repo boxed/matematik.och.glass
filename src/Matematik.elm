@@ -3,7 +3,7 @@ port module Matematik exposing (..)
 import Browser
 import Dict exposing (Dict)
 import Html exposing (Attribute, Html, div, h1, input, label, span, table, td, text, tr)
-import Html.Attributes exposing (checked, class, name, style, type_, value)
+import Html.Attributes exposing (checked, class, name, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Random
 import Set exposing (Set)
@@ -29,6 +29,12 @@ init flags =
         , b_range_to = 40
         , tables = Set.empty
         , randomize = False
+        , longDivisionStyle =
+            if String.startsWith "sv" flags.language then
+                SwedishStyle
+
+            else
+                UsStyle
         , flags = flags
         }
     , Random.generate GotRandomNumber (Random.int 0 100000)
@@ -73,6 +79,16 @@ modeSlug mode =
             "tables"
 
 
+longDivisionStyleSlug : LongDivisionStyle -> String
+longDivisionStyleSlug s =
+    case s of
+        SwedishStyle ->
+            "sv"
+
+        UsStyle ->
+            "us"
+
+
 toQuery : Model -> String
 toQuery model =
     let
@@ -92,6 +108,12 @@ toQuery model =
                 , ( "b_from", String.fromInt model.b_range_from )
                 , ( "b_to", String.fromInt model.b_range_to )
                 ]
+                    ++ (if model.mode == LongDivision then
+                            [ ( "style", longDivisionStyleSlug model.longDivisionStyle ) ]
+
+                        else
+                            []
+                       )
     in
     ( "mode", modeSlug model.mode )
         :: params
@@ -159,6 +181,10 @@ fromQuery query model =
 
                 Nothing ->
                     model.randomize
+        , longDivisionStyle =
+            Dict.get "style" params
+                |> Maybe.andThen (\slug -> List.head (List.filter (\s -> longDivisionStyleSlug s == slug) longDivisionStyles))
+                |> Maybe.withDefault model.longDivisionStyle
     }
 
 
@@ -175,8 +201,19 @@ type alias Model =
     , b_range_to : Int
     , tables : Set Int
     , randomize : Bool
+    , longDivisionStyle : LongDivisionStyle
     , flags : Flags
     }
+
+
+type LongDivisionStyle
+    = SwedishStyle
+    | UsStyle
+
+
+longDivisionStyles : List LongDivisionStyle
+longDivisionStyles =
+    [ SwedishStyle, UsStyle ]
 
 
 type alias Flags =
@@ -223,6 +260,7 @@ type Msg
     | SetBTo (Maybe Int)
     | ToggleTable Int
     | ToggleRandomize
+    | SetLongDivisionStyle LongDivisionStyle
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -268,6 +306,9 @@ update msg model =
         ToggleRandomize ->
             ( { model | randomize = not model.randomize }, Cmd.none )
 
+        SetLongDivisionStyle s ->
+            ( { model | longDivisionStyle = s }, Cmd.none )
+
         SetBTo int ->
             case int of
                 Just x ->
@@ -296,6 +337,11 @@ view model =
 
           else
             viewRangeSettings model
+        , if model.mode == LongDivision then
+            viewLongDivisionStylePicker model
+
+          else
+            text ""
         , if model.mode == MultiplicationTables then
             viewTables model
 
@@ -394,24 +440,38 @@ viewTable problems =
 
 viewRangeSettings : Model -> Html Msg
 viewRangeSettings model =
-    table [ class "no-print" ]
-            [ tr []
-                [ td [] [ text (fromLabel model ++ " " ++ String.fromInt model.a_range_from) ]
-                , td [] [ text (toLabel model ++ " " ++ String.fromInt model.a_range_to) ]
+    let
+        numberCell lbl v msg =
+            td []
+                [ label []
+                    [ text (lbl ++ " ")
+                    , input [ type_ "number", class "range-value", min_ "0", value (String.fromInt v), onInput (msg << String.toInt) ] []
+                    ]
                 ]
-            , tr []
-                [ td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_from), onInput (\x -> SetAFrom (String.toInt x)), class "slider" ] [] ]
-                , td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.a_range_to), onInput (\x -> SetATo (String.toInt x)), class "slider" ] [] ]
-                ]
-            , tr []
-                [ td [] [ text (fromLabel model ++ " " ++ String.fromInt model.b_range_from) ]
-                , td [] [ text (toLabel model ++ " " ++ String.fromInt model.b_range_to) ]
-                ]
-            , tr []
-                [ td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_from), onInput (\x -> SetBFrom (String.toInt x)), class "slider" ] [] ]
-                , td [] [ input [ style "width" "400px", type_ "range", min_ "0", max_ "500", value (String.fromInt model.b_range_to), onInput (\x -> SetBTo (String.toInt x)), class "slider" ] [] ]
-                ]
-            ]
+
+        sliderCell v msg =
+            td [] [ input [ type_ "range", class "slider", min_ "0", max_ "500", value (String.fromInt v), onInput (msg << String.toInt) ] [] ]
+    in
+    table [ class "no-print range-settings" ]
+        [ tr [] [ numberCell (fromLabel model) model.a_range_from SetAFrom, numberCell (toLabel model) model.a_range_to SetATo ]
+        , tr [] [ sliderCell model.a_range_from SetAFrom, sliderCell model.a_range_to SetATo ]
+        , tr [] [ numberCell (fromLabel model) model.b_range_from SetBFrom, numberCell (toLabel model) model.b_range_to SetBTo ]
+        , tr [] [ sliderCell model.b_range_from SetBFrom, sliderCell model.b_range_to SetBTo ]
+        ]
+
+
+viewLongDivisionStylePicker : Model -> Html Msg
+viewLongDivisionStylePicker model =
+    div [ class "no-print style-picker" ]
+        (List.map
+            (\s ->
+                label []
+                    [ input [ type_ "radio", name "long-division-style", checked (model.longDivisionStyle == s), onClick (SetLongDivisionStyle s) ] []
+                    , text (longDivisionStyleLabel s model)
+                    ]
+            )
+            longDivisionStyles
+        )
 
 
 viewModeSwitcher : Model -> Mode -> Html Msg
@@ -483,15 +543,16 @@ viewProblem model i =
                 ]
 
         LongDivision ->
-            if String.startsWith "sv" model.flags.language then
-                div [ class "problem long-division-sv" ]
-                    [ div [ class "both" ] [ span [ class "a" ] [ text a_times_b_s ], span [ class "b" ] [ text b_s ] ]
-                    ]
+            case model.longDivisionStyle of
+                SwedishStyle ->
+                    div [ class "problem long-division-sv" ]
+                        [ div [ class "both" ] [ span [ class "a" ] [ text a_times_b_s ], span [ class "b" ] [ text b_s ] ]
+                        ]
 
-            else
-                div [ class "problem long-division-en" ]
-                    [ div [ class "both" ] [ span [ class "b" ] [ text (b_s ++ ")") ], span [ class "a" ] [ text a_times_b_s ] ]
-                    ]
+                UsStyle ->
+                    div [ class "problem long-division-us" ]
+                        [ div [ class "both" ] [ span [ class "b" ] [ text (b_s ++ ")") ], span [ class "a" ] [ text a_times_b_s ] ]
+                        ]
 
 
 min_ : String -> Attribute msg
@@ -525,7 +586,7 @@ modeLabel mode model =
                 "Division"
 
             LongDivision ->
-                "Division, liggande stolen"
+                "Uppställd division"
 
             MultiplicationTables ->
                 "Multiplikationstabeller"
@@ -567,6 +628,25 @@ toLabel model =
 
     else
         "To"
+
+
+longDivisionStyleLabel : LongDivisionStyle -> Model -> String
+longDivisionStyleLabel s model =
+    if String.startsWith "sv" model.flags.language then
+        case s of
+            SwedishStyle ->
+                "Liggande stolen"
+
+            UsStyle ->
+                "Amerikansk"
+
+    else
+        case s of
+            SwedishStyle ->
+                "Swedish"
+
+            UsStyle ->
+                "US"
 
 
 randomizeLabel : Model -> String

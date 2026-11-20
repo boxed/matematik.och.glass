@@ -77,7 +77,7 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
   return fun.a === 9 ? fun.f(a, b, c, d, e, f, g, h, i) : fun(a)(b)(c)(d)(e)(f)(g)(h)(i);
 }
 
-console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize for better performance and smaller assets.');
+console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.2/optimize for better performance and smaller assets.');
 
 
 var _JsArray_empty = [];
@@ -4580,8 +4580,8 @@ var $elm$core$String$split = F2(
 var $elm$json$Json$Decode$indent = function (str) {
 	return A2(
 		$elm$core$String$join,
-		'\n    ',
-		A2($elm$core$String$split, '\n', str));
+		'\u000A    ',
+		A2($elm$core$String$split, '\u000A', str));
 };
 var $elm$core$List$foldl = F3(
 	function (func, acc, list) {
@@ -4673,7 +4673,7 @@ var $elm$core$List$reverse = function (list) {
 var $elm$core$String$uncons = _String_uncons;
 var $elm$json$Json$Decode$errorOneOf = F2(
 	function (i, error) {
-		return '\n\n(' + ($elm$core$String$fromInt(i + 1) + (') ' + $elm$json$Json$Decode$indent(
+		return '\u000A\u000A(' + ($elm$core$String$fromInt(i + 1) + (') ' + $elm$json$Json$Decode$indent(
 			$elm$json$Json$Decode$errorToString(error))));
 	});
 var $elm$json$Json$Decode$errorToString = function (error) {
@@ -4698,7 +4698,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 							return $elm$core$Char$isAlpha(_char) && A2($elm$core$String$all, $elm$core$Char$isAlphaNum, rest);
 						}
 					}();
-					var fieldName = isSimple ? ('.' + f) : ('[\'' + (f + '\']'));
+					var fieldName = isSimple ? ('.' + f) : ('[\u0027' + (f + '\u0027]'));
 					var $temp$error = err,
 						$temp$context = A2($elm$core$List$cons, fieldName, context);
 					error = $temp$error;
@@ -4749,7 +4749,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 								$elm$core$List$length(errors)) + ' ways:'));
 							return A2(
 								$elm$core$String$join,
-								'\n\n',
+								'\u000A\u000A',
 								A2(
 									$elm$core$List$cons,
 									introduction,
@@ -4761,16 +4761,16 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					var json = error.b;
 					var introduction = function () {
 						if (!context.b) {
-							return 'Problem with the given value:\n\n';
+							return 'Problem with the given value:\u000A\u000A';
 						} else {
 							return 'Problem with the value at json' + (A2(
 								$elm$core$String$join,
 								'',
-								$elm$core$List$reverse(context)) + ':\n\n    ');
+								$elm$core$List$reverse(context)) + ':\u000A\u000A    ');
 						}
 					}();
 					return introduction + ($elm$json$Json$Decode$indent(
-						A2($elm$json$Json$Encode$encode, 4, json)) + ('\n\n' + msg));
+						A2($elm$json$Json$Encode$encode, 4, json)) + ('\u000A\u000A' + msg));
 			}
 		}
 	});
@@ -5248,6 +5248,8 @@ var $author$project$Matematik$Addition = {$: 'Addition'};
 var $author$project$Matematik$GotRandomNumber = function (a) {
 	return {$: 'GotRandomNumber', a: a};
 };
+var $author$project$Matematik$SwedishStyle = {$: 'SwedishStyle'};
+var $author$project$Matematik$UsStyle = {$: 'UsStyle'};
 var $elm$core$Set$Set_elm_builtin = function (a) {
 	return {$: 'Set_elm_builtin', a: a};
 };
@@ -5471,6 +5473,15 @@ var $elm$core$List$head = function (list) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
+var $author$project$Matematik$longDivisionStyleSlug = function (s) {
+	if (s.$ === 'SwedishStyle') {
+		return 'sv';
+	} else {
+		return 'us';
+	}
+};
+var $author$project$Matematik$longDivisionStyles = _List_fromArray(
+	[$author$project$Matematik$SwedishStyle, $author$project$Matematik$UsStyle]);
 var $elm$core$Maybe$map = F2(
 	function (f, maybe) {
 		if (maybe.$ === 'Just') {
@@ -5569,6 +5580,23 @@ var $author$project$Matematik$fromQuery = F2(
 				a_range_to: A2(_int, 'a_to', model.a_range_to),
 				b_range_from: A2(_int, 'b_from', model.b_range_from),
 				b_range_to: A2(_int, 'b_to', model.b_range_to),
+				longDivisionStyle: A2(
+					$elm$core$Maybe$withDefault,
+					model.longDivisionStyle,
+					A2(
+						$elm$core$Maybe$andThen,
+						function (slug) {
+							return $elm$core$List$head(
+								A2(
+									$elm$core$List$filter,
+									function (s) {
+										return _Utils_eq(
+											$author$project$Matematik$longDivisionStyleSlug(s),
+											slug);
+									},
+									$author$project$Matematik$longDivisionStyles));
+						},
+						A2($elm$core$Dict$get, 'style', params))),
 				mode: A2(
 					$elm$core$Maybe$withDefault,
 					model.mode,
@@ -5772,7 +5800,18 @@ var $author$project$Matematik$init = function (flags) {
 		A2(
 			$author$project$Matematik$fromQuery,
 			flags.query,
-			{a_range_from: 12, a_range_to: 120, b_range_from: 5, b_range_to: 40, flags: flags, mode: $author$project$Matematik$Addition, randomize: false, seed: 0, tables: $elm$core$Set$empty}),
+			{
+				a_range_from: 12,
+				a_range_to: 120,
+				b_range_from: 5,
+				b_range_to: 40,
+				flags: flags,
+				longDivisionStyle: A2($elm$core$String$startsWith, 'sv', flags.language) ? $author$project$Matematik$SwedishStyle : $author$project$Matematik$UsStyle,
+				mode: $author$project$Matematik$Addition,
+				randomize: false,
+				seed: 0,
+				tables: $elm$core$Set$empty
+			}),
 		A2(
 			$elm$random$Random$generate,
 			$author$project$Matematik$GotRandomNumber,
@@ -5799,21 +5838,28 @@ var $author$project$Matematik$toQuery = function (model) {
 		model.randomize ? _List_fromArray(
 			[
 				_Utils_Tuple2('random', '1')
-			]) : _List_Nil) : _List_fromArray(
-		[
-			_Utils_Tuple2(
-			'a_from',
-			$elm$core$String$fromInt(model.a_range_from)),
-			_Utils_Tuple2(
-			'a_to',
-			$elm$core$String$fromInt(model.a_range_to)),
-			_Utils_Tuple2(
-			'b_from',
-			$elm$core$String$fromInt(model.b_range_from)),
-			_Utils_Tuple2(
-			'b_to',
-			$elm$core$String$fromInt(model.b_range_to))
-		]);
+			]) : _List_Nil) : _Utils_ap(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'a_from',
+				$elm$core$String$fromInt(model.a_range_from)),
+				_Utils_Tuple2(
+				'a_to',
+				$elm$core$String$fromInt(model.a_range_to)),
+				_Utils_Tuple2(
+				'b_from',
+				$elm$core$String$fromInt(model.b_range_from)),
+				_Utils_Tuple2(
+				'b_to',
+				$elm$core$String$fromInt(model.b_range_to))
+			]),
+		_Utils_eq(model.mode, $author$project$Matematik$LongDivision) ? _List_fromArray(
+			[
+				_Utils_Tuple2(
+				'style',
+				$author$project$Matematik$longDivisionStyleSlug(model.longDivisionStyle))
+			]) : _List_Nil);
 	return A2(
 		$elm$core$String$join,
 		'&',
@@ -6289,6 +6335,13 @@ var $author$project$Matematik$update = F2(
 						model,
 						{randomize: !model.randomize}),
 					$elm$core$Platform$Cmd$none);
+			case 'SetLongDivisionStyle':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{longDivisionStyle: s}),
+					$elm$core$Platform$Cmd$none);
 			default:
 				var _int = msg.a;
 				if (_int.$ === 'Just') {
@@ -6330,8 +6383,8 @@ var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Matematik$SetMode = function (a) {
-	return {$: 'SetMode', a: a};
+var $author$project$Matematik$SetLongDivisionStyle = function (a) {
+	return {$: 'SetLongDivisionStyle', a: a};
 };
 var $elm$json$Json$Encode$bool = _Json_wrap;
 var $elm$html$Html$Attributes$boolProperty = F2(
@@ -6344,37 +6397,19 @@ var $elm$html$Html$Attributes$boolProperty = F2(
 var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$label = _VirtualDom_node('label');
-var $author$project$Matematik$modeLabel = F2(
-	function (mode, model) {
+var $author$project$Matematik$longDivisionStyleLabel = F2(
+	function (s, model) {
 		if (A2($elm$core$String$startsWith, 'sv', model.flags.language)) {
-			switch (mode.$) {
-				case 'Addition':
-					return 'Addition';
-				case 'Subtraction':
-					return 'Subtraktion';
-				case 'Multiplication':
-					return 'Multiplikation';
-				case 'Division':
-					return 'Division';
-				case 'LongDivision':
-					return 'Division, liggande stolen';
-				default:
-					return 'Multiplikationstabeller';
+			if (s.$ === 'SwedishStyle') {
+				return 'Liggande stolen';
+			} else {
+				return 'Amerikansk';
 			}
 		} else {
-			switch (mode.$) {
-				case 'Addition':
-					return 'Addition';
-				case 'Subtraction':
-					return 'Subtraction';
-				case 'Multiplication':
-					return 'Multiplication';
-				case 'Division':
-					return 'Division';
-				case 'LongDivision':
-					return 'Long division';
-				default:
-					return 'Multiplication tables';
+			if (s.$ === 'SwedishStyle') {
+				return 'Swedish';
+			} else {
+				return 'US';
 			}
 		}
 	});
@@ -6397,6 +6432,76 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		$elm$json$Json$Decode$succeed(msg));
 };
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $author$project$Matematik$viewLongDivisionStylePicker = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('no-print style-picker')
+			]),
+		A2(
+			$elm$core$List$map,
+			function (s) {
+				return A2(
+					$elm$html$Html$label,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$type_('radio'),
+									$elm$html$Html$Attributes$name('long-division-style'),
+									$elm$html$Html$Attributes$checked(
+									_Utils_eq(model.longDivisionStyle, s)),
+									$elm$html$Html$Events$onClick(
+									$author$project$Matematik$SetLongDivisionStyle(s))
+								]),
+							_List_Nil),
+							$elm$html$Html$text(
+							A2($author$project$Matematik$longDivisionStyleLabel, s, model))
+						]));
+			},
+			$author$project$Matematik$longDivisionStyles));
+};
+var $author$project$Matematik$SetMode = function (a) {
+	return {$: 'SetMode', a: a};
+};
+var $author$project$Matematik$modeLabel = F2(
+	function (mode, model) {
+		if (A2($elm$core$String$startsWith, 'sv', model.flags.language)) {
+			switch (mode.$) {
+				case 'Addition':
+					return 'Addition';
+				case 'Subtraction':
+					return 'Subtraktion';
+				case 'Multiplication':
+					return 'Multiplikation';
+				case 'Division':
+					return 'Division';
+				case 'LongDivision':
+					return 'Uppställd division';
+				default:
+					return 'Multiplikationstabeller';
+			}
+		} else {
+			switch (mode.$) {
+				case 'Addition':
+					return 'Addition';
+				case 'Subtraction':
+					return 'Subtraction';
+				case 'Multiplication':
+					return 'Multiplication';
+				case 'Division':
+					return 'Division';
+				case 'LongDivision':
+					return 'Long division';
+				default:
+					return 'Multiplication tables';
+			}
+		}
+	});
 var $author$project$Matematik$viewModeSwitcher = F2(
 	function (model, mode) {
 		return A2(
@@ -6508,7 +6613,7 @@ var $author$project$Matematik$viewProblem = F2(
 									A3(
 										$elm$core$String$padRight,
 										padLen,
-										_Utils_chr('\u00A0'),
+										_Utils_chr(' '),
 										'+')),
 									$elm$html$Html$text(b_s)
 								]))
@@ -6544,7 +6649,7 @@ var $author$project$Matematik$viewProblem = F2(
 									A3(
 										$elm$core$String$padRight,
 										padLen,
-										_Utils_chr('\u00A0'),
+										_Utils_chr(' '),
 										'-')),
 									$elm$html$Html$text(b_s)
 								]))
@@ -6596,81 +6701,86 @@ var $author$project$Matematik$viewProblem = F2(
 								]))
 						]));
 			default:
-				return A2($elm$core$String$startsWith, 'sv', model.flags.language) ? A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('problem long-division-sv')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('both')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$span,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('a')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text(a_times_b_s)
-										])),
-									A2(
-									$elm$html$Html$span,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('b')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text(b_s)
-										]))
-								]))
-						])) : A2(
-					$elm$html$Html$div,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('problem long-division-en')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('both')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$span,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('b')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text(b_s + ')')
-										])),
-									A2(
-									$elm$html$Html$span,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$class('a')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text(a_times_b_s)
-										]))
-								]))
-						]));
+				var _v3 = model.longDivisionStyle;
+				if (_v3.$ === 'SwedishStyle') {
+					return A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('problem long-division-sv')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('both')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$span,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('a')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(a_times_b_s)
+											])),
+										A2(
+										$elm$html$Html$span,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('b')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(b_s)
+											]))
+									]))
+							]));
+				} else {
+					return A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('problem long-division-us')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('both')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$span,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('b')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(b_s + ')')
+											])),
+										A2(
+										$elm$html$Html$span,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('a')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(a_times_b_s)
+											]))
+									]))
+							]));
+				}
 		}
 	});
 var $author$project$Matematik$SetAFrom = function (a) {
@@ -6685,6 +6795,11 @@ var $author$project$Matematik$SetBFrom = function (a) {
 var $author$project$Matematik$SetBTo = function (a) {
 	return {$: 'SetBTo', a: a};
 };
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
 var $author$project$Matematik$fromLabel = function (model) {
 	return A2($elm$core$String$startsWith, 'sv', model.flags.language) ? 'Från' : 'From';
 };
@@ -6723,8 +6838,6 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			$elm$html$Html$Events$alwaysStop,
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$html$Html$table = _VirtualDom_node('table');
 var $elm$html$Html$td = _VirtualDom_node('td');
 var $author$project$Matematik$toLabel = function (model) {
@@ -6733,11 +6846,63 @@ var $author$project$Matematik$toLabel = function (model) {
 var $elm$html$Html$tr = _VirtualDom_node('tr');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Matematik$viewRangeSettings = function (model) {
+	var sliderCell = F2(
+		function (v, msg) {
+			return A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$type_('range'),
+								$elm$html$Html$Attributes$class('slider'),
+								$author$project$Matematik$min_('0'),
+								$author$project$Matematik$max_('500'),
+								$elm$html$Html$Attributes$value(
+								$elm$core$String$fromInt(v)),
+								$elm$html$Html$Events$onInput(
+								A2($elm$core$Basics$composeL, msg, $elm$core$String$toInt))
+							]),
+						_List_Nil)
+					]));
+		});
+	var numberCell = F3(
+		function (lbl, v, msg) {
+			return A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$label,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(lbl + ' '),
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$type_('number'),
+										$elm$html$Html$Attributes$class('range-value'),
+										$author$project$Matematik$min_('0'),
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(v)),
+										$elm$html$Html$Events$onInput(
+										A2($elm$core$Basics$composeL, msg, $elm$core$String$toInt))
+									]),
+								_List_Nil)
+							]))
+					]));
+		});
 	return A2(
 		$elm$html$Html$table,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('no-print')
+				$elm$html$Html$Attributes$class('no-print range-settings')
 			]),
 		_List_fromArray(
 			[
@@ -6746,152 +6911,48 @@ var $author$project$Matematik$viewRangeSettings = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.a_range_from)))
-							])),
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.a_range_to)))
-							]))
+						A3(
+						numberCell,
+						$author$project$Matematik$fromLabel(model),
+						model.a_range_from,
+						$author$project$Matematik$SetAFrom),
+						A3(
+						numberCell,
+						$author$project$Matematik$toLabel(model),
+						model.a_range_to,
+						$author$project$Matematik$SetATo)
 					])),
 				A2(
 				$elm$html$Html$tr,
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$input,
-								_List_fromArray(
-									[
-										A2($elm$html$Html$Attributes$style, 'width', '400px'),
-										$elm$html$Html$Attributes$type_('range'),
-										$author$project$Matematik$min_('0'),
-										$author$project$Matematik$max_('500'),
-										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.a_range_from)),
-										$elm$html$Html$Events$onInput(
-										function (x) {
-											return $author$project$Matematik$SetAFrom(
-												$elm$core$String$toInt(x));
-										}),
-										$elm$html$Html$Attributes$class('slider')
-									]),
-								_List_Nil)
-							])),
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$input,
-								_List_fromArray(
-									[
-										A2($elm$html$Html$Attributes$style, 'width', '400px'),
-										$elm$html$Html$Attributes$type_('range'),
-										$author$project$Matematik$min_('0'),
-										$author$project$Matematik$max_('500'),
-										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.a_range_to)),
-										$elm$html$Html$Events$onInput(
-										function (x) {
-											return $author$project$Matematik$SetATo(
-												$elm$core$String$toInt(x));
-										}),
-										$elm$html$Html$Attributes$class('slider')
-									]),
-								_List_Nil)
-							]))
+						A2(sliderCell, model.a_range_from, $author$project$Matematik$SetAFrom),
+						A2(sliderCell, model.a_range_to, $author$project$Matematik$SetATo)
 					])),
 				A2(
 				$elm$html$Html$tr,
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$author$project$Matematik$fromLabel(model) + (' ' + $elm$core$String$fromInt(model.b_range_from)))
-							])),
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$author$project$Matematik$toLabel(model) + (' ' + $elm$core$String$fromInt(model.b_range_to)))
-							]))
+						A3(
+						numberCell,
+						$author$project$Matematik$fromLabel(model),
+						model.b_range_from,
+						$author$project$Matematik$SetBFrom),
+						A3(
+						numberCell,
+						$author$project$Matematik$toLabel(model),
+						model.b_range_to,
+						$author$project$Matematik$SetBTo)
 					])),
 				A2(
 				$elm$html$Html$tr,
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$input,
-								_List_fromArray(
-									[
-										A2($elm$html$Html$Attributes$style, 'width', '400px'),
-										$elm$html$Html$Attributes$type_('range'),
-										$author$project$Matematik$min_('0'),
-										$author$project$Matematik$max_('500'),
-										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.b_range_from)),
-										$elm$html$Html$Events$onInput(
-										function (x) {
-											return $author$project$Matematik$SetBFrom(
-												$elm$core$String$toInt(x));
-										}),
-										$elm$html$Html$Attributes$class('slider')
-									]),
-								_List_Nil)
-							])),
-						A2(
-						$elm$html$Html$td,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$input,
-								_List_fromArray(
-									[
-										A2($elm$html$Html$Attributes$style, 'width', '400px'),
-										$elm$html$Html$Attributes$type_('range'),
-										$author$project$Matematik$min_('0'),
-										$author$project$Matematik$max_('500'),
-										$elm$html$Html$Attributes$value(
-										$elm$core$String$fromInt(model.b_range_to)),
-										$elm$html$Html$Events$onInput(
-										function (x) {
-											return $author$project$Matematik$SetBTo(
-												$elm$core$String$toInt(x));
-										}),
-										$elm$html$Html$Attributes$class('slider')
-									]),
-								_List_Nil)
-							]))
+						A2(sliderCell, model.b_range_from, $author$project$Matematik$SetBFrom),
+						A2(sliderCell, model.b_range_to, $author$project$Matematik$SetBTo)
 					]))
 			]));
 };
@@ -7389,6 +7450,7 @@ var $author$project$Matematik$view = function (model) {
 					$author$project$Matematik$viewModeSwitcher(model),
 					$author$project$Matematik$modes)),
 				_Utils_eq(model.mode, $author$project$Matematik$MultiplicationTables) ? $author$project$Matematik$viewTablesSettings(model) : $author$project$Matematik$viewRangeSettings(model),
+				_Utils_eq(model.mode, $author$project$Matematik$LongDivision) ? $author$project$Matematik$viewLongDivisionStylePicker(model) : $elm$html$Html$text(''),
 				_Utils_eq(model.mode, $author$project$Matematik$MultiplicationTables) ? $author$project$Matematik$viewTables(model) : A2(
 				$elm$html$Html$div,
 				_List_Nil,

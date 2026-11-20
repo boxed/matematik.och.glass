@@ -6,10 +6,34 @@
         <link href="https://fonts.googleapis.com/css?family=Muli:300" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Herr+Von+Muellerhoff" rel="stylesheet">
         <link rel="stylesheet" media="all and (max-device-width: 480px)" href="iphone.css">
+        <meta name="color-scheme" content="light dark">
         <style type="text/css">@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+        :root {
+            color-scheme: light dark;
+            --bg: white;
+            --fg: black;
+            --line: black;
+            --answer-line: #999;
+            --muted: #ccc;
+            --input-border: #ccc;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1b1b1d;
+                --fg: #e6e6e6;
+                --line: #e6e6e6;
+                --answer-line: #777;
+                --muted: #666;
+                --input-border: #555;
+            }
+        }
 
         html, head, body {
             margin: 0;
+            background: var(--bg);
+            color: var(--fg);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -34,8 +58,23 @@
             font-size: 20px;
             border: 0 solid #ddd;
             border-radius: 4px;
-            background: white;
-            color: #ccc;
+            background: var(--bg);
+            color: var(--muted);
+        }
+
+        .range-settings .slider {
+            width: 400px;
+        }
+
+        .range-settings .range-value {
+            width: 5em;
+            font: inherit;
+            font-size: 1rem;
+            padding: 0.1rem 0.3rem;
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--fg);
         }
 
         .problem {
@@ -50,41 +89,41 @@
             padding-right: 2rem;
         }
 
-        .long-division-se {
+        .long-division-sv {
             padding-bottom: 10rem;
         }
 
-        .long-division-se .both {
-            border-top: 1px solid black;
+        .long-division-sv .both {
+            border-top: 1px solid var(--line);
         }
 
-        .long-division-se .a {
+        .long-division-sv .a {
             padding-right: 0.5rem;
             padding-left: 0.2rem;
         }
 
-        .long-division-se .b {
+        .long-division-sv .b {
             border-bottom: 0;
-            border-left: 1px solid black;
-            border-bottom: 1px solid black;
+            border-left: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
             padding-left: 0.2rem;
             padding-right: 0.2rem;
         }
 
-        .long-division-en {
+        .long-division-us {
             padding-bottom: 10rem;
         }
 
-        .long-division-en .both {
+        .long-division-us .both {
         }
 
-        .long-division-en .a {
-            border-top: 1px solid black;
+        .long-division-us .a {
+            border-top: 1px solid var(--line);
             padding-right: 0.5rem;
             padding-left: 0.2rem;
         }
 
-        .long-division-en .b {
+        .long-division-us .b {
             border-bottom: 0;
         }
 
@@ -99,10 +138,11 @@
 
         .b {
             width: 100%;
-            border-bottom: 1px solid black;
+            border-bottom: 1px solid var(--line);
         }
 
-        .table-picker label {
+        .table-picker label,
+        .style-picker label {
             display: inline-block;
             margin: 0.5rem 0.75rem 1rem 0;
             font-size: 1.2rem;
@@ -140,7 +180,7 @@
 
         .times-table td.answer {
             width: 1.8cm;
-            border-bottom: 1px solid #999;
+            border-bottom: 1px solid var(--answer-line);
         }
 
         .times-list {
@@ -175,12 +215,20 @@
         .times-row .answer {
             width: 1.8cm;
             height: 100%;
-            border-bottom: 1px solid #999;
+            border-bottom: 1px solid var(--answer-line);
         }
 
         @media print {
             @page {
                 margin: 1.5cm 1cm;
+            }
+
+            :root {
+                color-scheme: light;
+                --bg: white;
+                --fg: black;
+                --line: black;
+                --answer-line: #999;
             }
 
             html, body {
