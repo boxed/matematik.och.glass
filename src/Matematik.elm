@@ -28,6 +28,7 @@ init flags =
         , b_range_from = 5
         , b_range_to = 40
         , tables = Set.empty
+        , randomize = False
         , flags = flags
         }
     , Random.generate GotRandomNumber (Random.int 0 100000)
@@ -77,7 +78,13 @@ toQuery model =
     let
         params =
             if model.mode == MultiplicationTables then
-                [ ( "tables", String.join "," (List.map String.fromInt (Set.toList model.tables)) ) ]
+                ( "tables", String.join "," (List.map String.fromInt (Set.toList model.tables)) )
+                    :: (if model.randomize then
+                            [ ( "random", "1" ) ]
+
+                        else
+                            []
+                       )
 
             else
                 [ ( "a_from", String.fromInt model.a_range_from )
@@ -145,6 +152,13 @@ fromQuery query model =
 
                 Nothing ->
                     model.tables
+        , randomize =
+            case Dict.get "random" params of
+                Just v ->
+                    v == "1"
+
+                Nothing ->
+                    model.randomize
     }
 
 
@@ -160,6 +174,7 @@ type alias Model =
     , b_range_from : Int
     , b_range_to : Int
     , tables : Set Int
+    , randomize : Bool
     , flags : Flags
     }
 
@@ -207,6 +222,7 @@ type Msg
     | SetBFrom (Maybe Int)
     | SetBTo (Maybe Int)
     | ToggleTable Int
+    | ToggleRandomize
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -249,6 +265,9 @@ update msg model =
             else
                 ( { model | tables = Set.insert n model.tables }, Cmd.none )
 
+        ToggleRandomize ->
+            ( { model | randomize = not model.randomize }, Cmd.none )
+
         SetBTo int ->
             case int of
                 Just x ->
@@ -278,7 +297,7 @@ view model =
           else
             viewRangeSettings model
         , if model.mode == MultiplicationTables then
-            div [ class "tables" ] (List.map viewTable (Set.toList model.tables))
+            viewTables model
 
           else
             div [] (List.map (viewProblem model) (List.range 0 188))
@@ -288,22 +307,79 @@ view model =
 viewTablesSettings : Model -> Html Msg
 viewTablesSettings model =
     div [ class "no-print table-picker" ]
-        (List.map
-            (\n ->
-                label []
-                    [ input [ type_ "checkbox", checked (Set.member n model.tables), onClick (ToggleTable n) ] []
-                    , text (String.fromInt n)
-                    ]
+        [ div []
+            (List.map
+                (\n ->
+                    label []
+                        [ input [ type_ "checkbox", checked (Set.member n model.tables), onClick (ToggleTable n) ] []
+                        , text (String.fromInt n)
+                        ]
+                )
+                (List.range 1 15)
             )
-            (List.range 1 15)
-        )
+        , div []
+            [ label []
+                [ input [ type_ "checkbox", checked model.randomize, onClick ToggleRandomize ] []
+                , text (randomizeLabel model)
+                ]
+            ]
+        ]
 
 
-viewTable : Int -> Html Msg
-viewTable n =
+{-| One table per selected number, or when randomizing, all problems from all
+tables shuffled into one continuous list.
+-}
+viewTables : Model -> Html Msg
+viewTables model =
+    let
+        problems =
+            Set.toList model.tables
+                |> List.concatMap (\n -> List.map (\k -> ( n, k )) (List.range 1 10))
+    in
+    if model.randomize then
+        div [ class "times-list" ]
+            (List.map viewListRow (shuffle (Random.initialSeed model.seed) problems))
+
+    else
+        div [ class "tables" ] (List.map viewTable (chunksOf 10 problems))
+
+
+viewListRow : ( Int, Int ) -> Html Msg
+viewListRow ( n, k ) =
+    div [ class "times-row" ]
+        [ span [ class "n" ] [ text (String.fromInt n) ]
+        , span [] [ text "·" ]
+        , span [ class "k" ] [ text (String.fromInt k) ]
+        , span [] [ text "=" ]
+        , span [ class "answer" ] []
+        ]
+
+
+shuffle : Random.Seed -> List a -> List a
+shuffle seed xs =
+    let
+        ( keys, _ ) =
+            Random.step (Random.list (List.length xs) (Random.float 0 1)) seed
+    in
+    List.map2 Tuple.pair keys xs
+        |> List.sortBy Tuple.first
+        |> List.map Tuple.second
+
+
+chunksOf : Int -> List a -> List (List a)
+chunksOf n xs =
+    if List.isEmpty xs then
+        []
+
+    else
+        List.take n xs :: chunksOf n (List.drop n xs)
+
+
+viewTable : List ( Int, Int ) -> Html Msg
+viewTable problems =
     table [ class "times-table" ]
         (List.map
-            (\k ->
+            (\( n, k ) ->
                 tr []
                     [ td [ class "n" ] [ text (String.fromInt n) ]
                     , td [] [ text "·" ]
@@ -312,7 +388,7 @@ viewTable n =
                     , td [ class "answer" ] []
                     ]
             )
-            (List.range 1 10)
+            problems
         )
 
 
@@ -491,3 +567,12 @@ toLabel model =
 
     else
         "To"
+
+
+randomizeLabel : Model -> String
+randomizeLabel model =
+    if String.startsWith "sv" model.flags.language then
+        "Blanda"
+
+    else
+        "Randomize"

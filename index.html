@@ -143,6 +143,41 @@
             border-bottom: 1px solid #999;
         }
 
+        .times-list {
+            width: 19cm;
+            column-count: 3;
+            column-gap: 1.2cm;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1.4rem;
+        }
+
+        .times-row {
+            display: flex;
+            align-items: flex-end;
+            height: 0.95cm;
+            break-inside: avoid;
+        }
+
+        .times-row span {
+            padding: 0 0.2rem;
+        }
+
+        .times-row .n {
+            width: 1.4em;
+            text-align: right;
+        }
+
+        .times-row .k {
+            width: 1.4em;
+            text-align: left;
+        }
+
+        .times-row .answer {
+            width: 1.8cm;
+            height: 100%;
+            border-bottom: 1px solid #999;
+        }
+
         @media print {
             @page {
                 margin: 1.5cm 1cm;
